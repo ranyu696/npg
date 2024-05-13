@@ -9,7 +9,7 @@ import {
 } from "@nextui-org/navbar";
 import {Divider} from "@nextui-org/divider";
 import { Button } from "@nextui-org/button";
-import { Link } from "@nextui-org/link";
+import Link from 'next/link'
 
 
 import { link as linkStyles } from "@nextui-org/theme";
@@ -64,13 +64,13 @@ export const Navbar = () => {
 				justify="end"
 			>
 				<NavbarItem className="hidden sm:flex gap-2">
-					<Link isExternal href={siteConfig.links.twitter} aria-label="Twitter">
+					<Link  href={siteConfig.links.twitter} aria-label="Twitter">
 						<TwitterIcon className="text-default-500" />
 					</Link>
-					<Link isExternal href={siteConfig.links.discord} aria-label="Discord">
+					<Link  href={siteConfig.links.discord} aria-label="Discord">
 						<DiscordIcon className="text-default-500" />
 					</Link>
-					<Link isExternal href={siteConfig.links.github} aria-label="Github">
+					<Link  href={siteConfig.links.github} aria-label="Github">
 						<GithubIcon className="text-default-500" />
 					</Link>
 					<ThemeSwitch />
@@ -78,7 +78,7 @@ export const Navbar = () => {
 				<NavbarItem className="hidden lg:flex"><SearchForm /></NavbarItem>
 				<NavbarItem className="hidden md:flex">
 					<Button
-            isExternal
+            
 						as={Link}
 						className="text-sm font-normal text-default-600 bg-default-100"
 						href={siteConfig.links.sponsor}
@@ -91,7 +91,7 @@ export const Navbar = () => {
 			</NavbarContent>
 
 			<NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-				<Link isExternal href={siteConfig.links.github} aria-label="Github">
+				<Link href={siteConfig.links.github} aria-label="Github">
 					<GithubIcon className="text-default-500" />
 				</Link>
 				<ThemeSwitch />
@@ -103,18 +103,8 @@ export const Navbar = () => {
 			<div className="mx-4 mt-2 grid grid-cols-2 gap-2">
 					{siteConfig.navItems.map((item, index) => (
 						<NavbarMenuItem key={`${item}-${index}`}>
-							<Link
-								color={
-									index === 2
-										? "primary"
-										: index === siteConfig.navItems.length - 1
-										? "danger"
-										: "foreground"
-								}
-								href={item.href}
-								size="lg"
-							>
-								{item.label}
+							<Link href={item.href} aria-label={item.label} prefetch={true}>
+							{item.label}
 							</Link>
 						</NavbarMenuItem>
 					))}
@@ -123,18 +113,8 @@ export const Navbar = () => {
 			<div className="mx-4 mt-2 grid grid-cols-2 gap-2">
 					{siteConfig.navMenuItems.map((item, index) => (
 						<NavbarMenuItem key={`${item}-${index}`}>
-							<Link
-								color={
-									index === 2
-										? "primary"
-										: index === siteConfig.navMenuItems.length - 1
-										? "danger"
-										: "foreground"
-								}
-								href={item.href}
-								size="lg"
-							>
-								{item.label}
+							<Link href={item.href} aria-label={item.label} prefetch={true}>
+							{item.label}
 							</Link>
 						</NavbarMenuItem>
 					))}

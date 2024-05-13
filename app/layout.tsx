@@ -88,7 +88,7 @@ export default function RootLayout({
 							{children}
 						</main>
 						<footer className="w-full flex flex-col items-center justify-center py-3">
-  <div className="flex items-center justify-center gap-4 mb-4">
+		<div className="flex flex-wrap justify-center gap-2 mb-4">
   {siteConfig.friendLinks.map((link, index) => (
     <Link
       key={index}
@@ -97,15 +97,21 @@ export default function RootLayout({
       href={link.href}
       title={link.label}
     >
-      <Button color="primary" variant="shadow">{link.label}</Button>  
+      <Button
+        color="primary"
+        variant="shadow"
+        className="w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3"
+      >
+        {link.label}
+      </Button>
     </Link>
   ))}
-  </div>
-  <div className="flex items-center gap-1">
+</div>
+  <div className="flex items-center gap-1 mt-6 mb-32 md:mb-8">
     <span className="text-default-600">Powered by</span>
     <p className="text-primary">女仆阁</p>
   </div>
-  <Script src="https://example.com/script.js" strategy="lazyOnload" />
+  <Script src="/script.js" strategy="lazyOnload" />
 </footer>
 					</div>
 				</Providers>

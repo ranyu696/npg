@@ -30,7 +30,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
       <span className="absolute bottom-1 right-1 rounded-lg px-2 py-1 text-xs text-white bg-white/30 backdrop-blur-sm">
         {time}
       </span>
-      <Link href={`/video/${_id}`}>
+      <Link href={`/video/${_id}`} prefetch={true}>
       <Image
         loading="lazy"
         placeholder="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 300'%3E%3Crect width='100%25' height='100%25' fill='%23f0f0f0'/%3E%3Crect x='0' y='0' width='100%25' height='100%25' fill='%23e0e0e0'%3E%3Canimate attributeName='x' from='-100%25' to='100%25' dur='1s' repeatCount='indefinite'/%3E%3C/rect%3E%3C/svg%3E"
@@ -45,7 +45,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
       
     </div>
     <div className="my-2 text-sm text-nord4 truncate">
-    <Link href={`/video/${_id}`}>
+    <Link href={`/video/${_id}`} prefetch={true}>
       <p className="text-secondary group-hover:text-primary">
         {originalname}
       </p>
@@ -54,5 +54,6 @@ const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
     </div>
   );
 };
+
 
 export default VideoCard;
