@@ -1,0 +1,49 @@
+{
+    "short_name": "VideoSite",
+    "name": "My Video Website",
+    "icons": [
+      {
+        "src": "/icon-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/icon-256x256.png",
+        "sizes": "256x256",
+        "type": "image/png"
+      },
+      {
+        "src": "/icon-384x384.png",
+        "sizes": "384x384",
+        "type": "image/png"
+      },
+      {
+        "src": "/icon-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "start_url": "/",
+    "background_color": "#000000",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#ff0000",
+    "description": "A website for streaming videos.",
+    "orientation": "portrait",
+    "categories": [
+      "entertainment",
+      "video"
+    ],
+    "screenshots": [
+      {
+        "src": "/screenshot1.png",
+        "sizes": "1280x720",
+        "type": "image/png"
+      },
+      {
+        "src": "/screenshot2.png",
+        "sizes": "1280x720",
+        "type": "image/png"
+      }
+    ]
+  }
