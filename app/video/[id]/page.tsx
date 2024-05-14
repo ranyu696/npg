@@ -1,7 +1,6 @@
 
 import { fetchContents, fetchVideoById } from '@/app/lib/api';
 import VideoPlayer from '@/app/ui/VideoPlayer';
-import { Suspense } from 'react'
 import {Chip} from "@nextui-org/chip";
 import { FcMultipleCameras } from "react-icons/fc";
 import { FcFilm } from "react-icons/fc";
@@ -61,11 +60,17 @@ export default async function VideoPage({ params }: Props) {
   const video = await fetchVideoById(params.id);
   const videos = await fetchContents('category', video.category, 'movie,tv', 1, 10, 'countDesc');
   const IMG_HOST = process.env.NEXT_PUBLIC_IMG_HOST;
-  const posterUrl= `${IMG_HOST}${video.poster2.url}`;
+  const posterUrl = `${IMG_HOST}${video.poster2.url}`;
+  const thumbnailUrl = `${IMG_HOST}${video.poster2.url.replace('/poster2.jpg', '/thumbnails.jpg')}`;
+  const match = video.duration?.match(/\d+/);
+  const durationInMinutes = match ? parseInt(match[0], 10) : 0;
+  const duration = Math.floor(durationInMinutes / 60);
+  console.log(thumbnailUrl)
+
   return (
     <>
     <div className="w-full lg:w-3/4">
-      <VideoPlayer videoUrl={video.m3u8} posterUrl={posterUrl} />
+      <VideoPlayer videoUrl={video.m3u8} posterUrl={posterUrl} thumbnailUrl={thumbnailUrl} duration={duration}/>
       <div className="mt-4 flex items-center justify-between">
   <h1 className="text-base lg:text-lg text-nord6 flex-grow">{video.title}</h1>
   <ButtonServer>点击复制网址</ButtonServer>
@@ -87,7 +92,6 @@ export default async function VideoPage({ params }: Props) {
       </Chip>
       <p>{video.summary}</p>
       <div className="pt-4">
-      <Suspense fallback={<p>Loading feed...</p>}>
       <div className="mt-4 mb-4">
        <h2 className='font-bold text-lg border-rose-500 border-l-4 pl-3'>智能推荐</h2>
        <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-4 xl:gap-8 mt-4'>
@@ -96,17 +100,14 @@ export default async function VideoPage({ params }: Props) {
       ))}
       </div>
     </div>
-      </Suspense>
       </div>
       </div>
       <div className="w-full lg:w-1/4 p-3 hidden lg:block">
-      <Suspense fallback={<p>Loading weather...</p>}>
       <div className="flex-col mb-6">
       {videos.map((video: Video) => (
         <VideoCard key={video._id} video={video} />
       ))}
     </div>
-      </Suspense>
       </div>
       </>
   );

@@ -3,12 +3,12 @@ import { Metadata, Viewport } from "next";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Providers } from "./providers";
-import {Button, ButtonGroup} from "@nextui-org/button";
+import { Button, ButtonGroup } from "@nextui-org/button";
 import { Navbar } from "@/components/navbar";
 import { Link } from "@nextui-org/link";
 import Script from 'next/script'
-import { YandexMetrica } from '@/components/YandexMetrica'
 import clsx from "clsx";
+import Metrika from 'next-metrika';
 import { WebVitals } from '@/components/web-vitals'
 
 export const metadata: Metadata = {
@@ -24,38 +24,38 @@ export const metadata: Metadata = {
 	icons: {
 		icon: '/favicon.ico',
 		apple: '/apple-icon.jpg',
-	  },
-	  openGraph: {
+	},
+	openGraph: {
 		type: 'website',
 		siteName: siteConfig.name,
 		images: [
-		  {
-			url: '/twitter-image',
-			width: 800,
-			height: 600,
-		  },
+			{
+				url: '/twitter-image',
+				width: 800,
+				height: 600,
+			},
 		],
-	  },
-	  twitter: {
+	},
+	twitter: {
 		card: "summary_large_image",
 		title: siteConfig.name,
 		description: siteConfig.description,
 		creator: "@myvideosite",
 		images: '/twitter-image',
-	  },
-	  robots: {
+	},
+	robots: {
 		index: true,
 		follow: true,
 		nocache: true,
 		googleBot: {
-		  index: true,
-		  follow: true,
-		  noimageindex: true,
-		  'max-video-preview': 60,
-		  'max-image-preview': 'large',
-		  'max-snippet': 320,
+			index: true,
+			follow: true,
+			noimageindex: true,
+			'max-video-preview': 60,
+			'max-image-preview': 'large',
+			'max-snippet': 320,
 		},
-	  },
+	},
 }
 
 export const viewport: Viewport = {
@@ -78,45 +78,46 @@ export default function RootLayout({
 					"min-h-screen bg-background font-sans antialiased",
 					fontSans.variable
 				)}
-			> <YandexMetrica>
+			>
+				<Metrika id={95279192} />
 				<WebVitals />
 				<Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
 					<div className="relative flex flex-col h-screen">
 						<Navbar />
 						<main className="container mx-auto max-w-8xl pt-16 flex-grow">
-						
+
 							{children}
 						</main>
 						<footer className="w-full flex flex-col items-center justify-center py-3">
-		<div className="flex flex-wrap justify-center gap-2 mb-4">
-  {siteConfig.friendLinks.map((link, index) => (
-    <Link
-      key={index}
-      isExternal
-      className="flex items-center gap-1 text-current"
-      href={link.href}
-      title={link.label}
-    >
-      <Button
-        color="primary"
-        variant="shadow"
-        className="w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3"
-      >
-        {link.label}
-      </Button>
-    </Link>
-  ))}
-</div>
-  <div className="flex items-center gap-1 mt-6 mb-32 md:mb-8">
-    <span className="text-default-600">Powered by</span>
-    <p className="text-primary">女仆阁</p>
-  </div>
-  <Script src="/script.js" strategy="lazyOnload" />
-</footer>
+							<div className="flex flex-wrap justify-center gap-2 mb-4">
+								{siteConfig.friendLinks.map((link, index) => (
+									<Link
+										key={index}
+										isExternal
+										className="flex items-center gap-1 text-current"
+										href={link.href}
+										title={link.label}
+									>
+										<Button
+											color="primary"
+											variant="shadow"
+											className="w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3"
+										>
+											{link.label}
+										</Button>
+									</Link>
+								))}
+							</div>
+							<div className="flex items-center gap-1 mt-6 mb-32 md:mb-8">
+								<span className="text-default-600">Powered by</span>
+								<p className="text-primary">女仆阁</p>
+							</div>
+							<Script src="/script.js" strategy="lazyOnload" />
+						</footer>
 					</div>
 				</Providers>
-				</YandexMetrica>
-			</body>
-		</html>
+				
+		</body>
+		</html >
 	);
 }
