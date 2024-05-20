@@ -1,5 +1,5 @@
 import React from 'react';
-import VideoCard from '@/app/ui/VideoCard';
+import VideoCard from '@/components/VideoCard';
 
 interface VideoGridProps {
   videos: any[];
