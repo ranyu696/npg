@@ -1,12 +1,12 @@
 
 import { fetchContents, fetchVideoById } from '@/app/lib/api';
-import VideoPlayer from '@/app/ui/VideoPlayer';
+import VideoPlayer from '@/components/VideoPlayer';
 import {Chip} from "@nextui-org/chip";
 import { FcMultipleCameras } from "react-icons/fc";
 import { FcFilm } from "react-icons/fc";
-import ButtonServer from '@/app/ui/ButtonServer';
+import ButtonServer from '@/components/ButtonServer';
 import { Metadata } from 'next';
-import VideoCard from '@/app/ui/VideoCard';
+import VideoCard from '@/components/VideoCard';
 import type { Video } from '@/types/index';
 
 type Props = {
@@ -59,18 +59,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function VideoPage({ params }: Props) {
   const video = await fetchVideoById(params.id);
   const videos = await fetchContents('category', video.category, 'movie,tv', 1, 10, 'countDesc');
-  const IMG_HOST = process.env.NEXT_PUBLIC_IMG_HOST;
-  const posterUrl = `${IMG_HOST}${video.poster2.url}`;
-  const thumbnailUrl = `${IMG_HOST}${video.poster2.url.replace('/poster2.jpg', '/thumbnails.jpg')}`;
-  const match = video.duration?.match(/\d+/);
-  const durationInMinutes = match ? parseInt(match[0], 10) : 0;
-  const duration = Math.floor(durationInMinutes / 60);
-  console.log(thumbnailUrl)
 
   return (
     <>
     <div className="w-full lg:w-3/4">
-      <VideoPlayer videoUrl={video.m3u8} posterUrl={posterUrl} thumbnailUrl={thumbnailUrl} duration={duration}/>
+      <VideoPlayer videoUrl={video.m3u8}/>
       <div className="mt-4 flex items-center justify-between">
   <h1 className="text-base lg:text-lg text-nord6 flex-grow">{video.title}</h1>
   <ButtonServer>点击复制网址</ButtonServer>

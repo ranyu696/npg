@@ -2,7 +2,7 @@
 import { Snippet } from "@nextui-org/snippet";
 import { Code } from "@nextui-org/code";
 import { title, subtitle } from "@/components/primitives";
-import VideoCard from "@/app/ui/VideoCard";
+import VideoCard from "@/components/VideoCard";
 import Image from 'next/image';
 import Link from 'next/link';
 import { getData } from '@/app/lib/getData'; // 导入 React Server Component

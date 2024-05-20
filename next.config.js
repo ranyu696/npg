@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'v2.shizizuodh.com',
+        hostname: 'taotaodaohang.taotaodaohang.cc',
         port: '',
         pathname: '/**',
       },

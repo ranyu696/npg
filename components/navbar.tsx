@@ -28,7 +28,7 @@ import {
 } from "@/components/icons";
 
 import { Logo } from "@/components/icons";
-import SearchForm from '@/app/ui/SearchForm';
+import SearchForm from '@/components/SearchForm';
 
 export const Navbar = () => {
 

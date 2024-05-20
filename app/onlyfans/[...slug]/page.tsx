@@ -1,7 +1,7 @@
 // app/categories/onlyfans/[slug]/page.tsx
 import { fetchContents, fetchContentCounts } from '@/app/lib/api';
 import VideoCard from "@/app/ui/VideoCard";
-import { Pagination } from "@/app/ui/Pagination";
+import { Pagination } from "@/components/Pagination";
 import { Metadata } from 'next';
 
 
