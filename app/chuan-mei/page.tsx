@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Divider } from "@nextui-org/divider";
-import VideoCard from "@/app/ui/VideoCard";
+import VideoCard from "@/components/VideoCard";
 import { Video } from '@/types';
 import {Progress} from "@nextui-org/progress";
 import { Snippet } from '@nextui-org/snippet';

@@ -1,6 +1,6 @@
 // app/categories/chuan-mei/[slug]/page.tsx
 import { fetchContents, fetchContentCounts } from '@/app/lib/api';
-import VideoCard from "@/app/ui/VideoCard";
+import VideoCard from "@/components/VideoCard";
 import { Pagination } from "@/components/Pagination";
 import { Metadata } from 'next';
 

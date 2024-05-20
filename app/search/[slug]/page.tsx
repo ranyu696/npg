@@ -1,6 +1,6 @@
 // app/search/[slug]/page.tsx
 import { searchVideos } from '@/app/lib/api';
-import VideoCard from "@/app/ui/VideoCard";
+import VideoCard from "@/components/VideoCard";
 import { Metadata } from 'next';
 
 const allowedCategories = [
