@@ -82,16 +82,12 @@ export const siteConfig = {
 		  href: "https://lt.bluedaohang.club/d33vfa",
 		},
 		{
-		  label: "破解福利榜",
-		  href: "https://pjfulidh02.com/",
-		},
-		{
 			label: "色界吧",
 			href: "https://廄訂構.sejie8.de/%e7%9f%af%e6%92%a3%e7%b3%be%e7%af%84",
 		},
 		{
-			label: "逗比导航",
-			href: "https://dbdh.sbs/cd",
+			label: "花心吧",
+			href: "https://鷹貿網2.huaxin8.irish/檸鍁窮權雖",
 		},
 	  ],
 };

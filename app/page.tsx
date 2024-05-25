@@ -43,7 +43,7 @@ export default async function Home() {
       <div className="mt-8">
         <Snippet hideSymbol hideCopyButton variant="flat">
           <span>
-            收藏最新地址<Code color="primary">npg3.ru</Code>
+            收藏最新地址<Code color="primary">npg1.online</Code>
           </span>
         </Snippet>
       </div>
