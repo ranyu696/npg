@@ -59,9 +59,7 @@ async function MediaCategoryPage({
     fetchContents('category', slug, 'movie,tv', currentPage, pageSize, 'createDesc'),
   ]);
   const counts = countsResult.counts;
-  console.log('视频数量:', counts);
   const totalPages = Math.ceil(counts / pageSize);
-  console.log('视频分页:', totalPages);
   
 	return (
 	  <>
@@ -86,20 +84,24 @@ async function MediaCategoryPage({
   
   export default MediaCategoryPage;
   export async function generateMetadata({ params }: { params: { slug: string[] } }): Promise<Metadata> {
-    const slug = decodeURIComponent(params.slug[0]);
-    return {
-      title: `${slug} - 传媒视频`,
-      description: `观看最新的 ${slug} 传媒视频`,
-      openGraph: {
-        title: `${slug} - 传媒视频`,
-        description: `观看最新的 ${slug} 传媒视频`,
-        type: 'website',
-        url: `/chuan-mei/${encodeURIComponent(slug)}`,
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: `${slug} - 传媒视频`,
-        description: `观看最新的 ${slug} 传媒视频`,
-      },
-    };
+	const slug = decodeURIComponent(params.slug[0]);
+	const currentPage = params.slug[1] ? parseInt(params.slug[1], 10) : 1;
+	const title = currentPage > 1 ? `${slug} - 传媒视频 - 第${currentPage}页` : `${slug} - 传媒视频`;
+	const description = currentPage > 1 ? `观看最新的 ${slug} 传媒视频 - 当前第${currentPage}页` : `观看最新的 ${slug} 传媒视频`;
+  
+	return {
+	  title,
+	  description,
+	  openGraph: {
+		title,
+		description,
+		type: 'website',
+		url: `/chuan-mei/${encodeURIComponent(slug)}${currentPage > 1 ? `/${currentPage}` : ''}`,
+	  },
+	  twitter: {
+		card: 'summary_large_image',
+		title,
+		description,
+	  },
+	};
   }

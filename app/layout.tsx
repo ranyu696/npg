@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
+import { GoogleAnalytics } from '@next/third-parties/google'
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Providers } from "./providers";
@@ -9,7 +10,6 @@ import { Link } from "@nextui-org/link";
 import Script from 'next/script'
 import clsx from "clsx";
 import Metrika from 'next-metrika';
-import { WebVitals } from '@/components/web-vitals'
 
 export const metadata: Metadata = {
 	title: {
@@ -80,7 +80,7 @@ export default function RootLayout({
 				)}
 			>
 				<Metrika id={95279192} />
-				<WebVitals />
+				<GoogleAnalytics gaId="G-98GKDQVGE5" />
 				<Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
 					<div className="relative flex flex-col h-screen">
 						<Navbar />

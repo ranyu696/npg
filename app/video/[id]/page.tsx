@@ -59,11 +59,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function VideoPage({ params }: Props) {
   const video = await fetchVideoById(params.id);
   const videos = await fetchContents('category', video.category, 'movie,tv', 1, 10, 'countDesc');
+  const IMG_HOST = process.env.NEXT_PUBLIC_IMG_HOST;
+  const posterUrl = `${IMG_HOST}${video.poster2.url}`;
 
   return (
     <>
     <div className="w-full lg:w-3/4">
-      <VideoPlayer videoUrl={video.m3u8}/>
+      <VideoPlayer videoUrl={video.m3u8}  posterUrl={posterUrl} />
       <div className="mt-4 flex items-center justify-between">
   <h1 className="text-base lg:text-lg text-nord6 flex-grow">{video.title}</h1>
   <ButtonServer>点击复制网址</ButtonServer>
