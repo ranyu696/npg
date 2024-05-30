@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   const API_HOST = process.env.API_HOST!;
   const API_KEY = process.env.API_KEY!;
 
-  const res = await fetch(`${API_HOST}/api2/getcontents?page=1&size=20&type=movie,tv&category=${category}`, {
+  const res = await fetch(`${API_HOST}/getcontents?page=1&size=20&type=movie,tv&category=${category}`, {
     headers: {
       'Content-Type': 'application/json',
       'token': API_KEY,

@@ -5,7 +5,7 @@ import { title, subtitle } from "@/components/primitives";
 import VideoCard from "@/components/VideoCard";
 import Image from 'next/image';
 import Link from 'next/link';
-import { getData } from '@/app/lib/getData'; // 导入 React Server Component
+import { getData } from '@/config/getData'; // 导入 React Server Component
 
 export default async function Home() {
   const videosByCategory = await getData();

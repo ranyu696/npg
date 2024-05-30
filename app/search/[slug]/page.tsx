@@ -1,5 +1,5 @@
 // app/search/[slug]/page.tsx
-import { searchVideos } from '@/app/lib/api';
+import { searchVideos } from '@/config/api';
 import VideoCard from "@/components/VideoCard";
 import { Metadata } from 'next';
 
@@ -60,7 +60,7 @@ async function SearchResultPage({
   // 过滤搜索结果,只保留 "category" 为 "麻豆视频" 的结果
   const filteredPosts = posts.filter((posts: any) => allowedCategories.includes(posts.category));
   return (
-    <>
+    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
       <h1 className="text-xl font-bold subpixel-antialiased pb-4">
         搜索结果: {query}
       </h1>
@@ -69,7 +69,7 @@ async function SearchResultPage({
           <VideoCard key={video._id} video={video} />
         ))}
       </div>
-    </>
+      </section>
   );
 }
 

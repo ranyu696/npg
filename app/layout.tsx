@@ -20,21 +20,9 @@ export const metadata: Metadata = {
 	keywords: siteConfig.keywords,
 	manifest: '/manifest.json',
 	generator: 'Next.js',
-	referrer: 'origin-when-cross-origin',
-	icons: {
-		icon: '/favicon.ico',
-		apple: '/apple-icon.jpg',
-	},
 	openGraph: {
 		type: 'website',
 		siteName: siteConfig.name,
-		images: [
-			{
-				url: '/twitter-image',
-				width: 800,
-				height: 600,
-			},
-		],
 	},
 	twitter: {
 		card: "summary_large_image",
@@ -42,19 +30,6 @@ export const metadata: Metadata = {
 		description: siteConfig.description,
 		creator: "@myvideosite",
 		images: '/twitter-image',
-	},
-	robots: {
-		index: true,
-		follow: true,
-		nocache: true,
-		googleBot: {
-			index: true,
-			follow: true,
-			noimageindex: true,
-			'max-video-preview': 60,
-			'max-image-preview': 'large',
-			'max-snippet': 320,
-		},
 	},
 }
 
