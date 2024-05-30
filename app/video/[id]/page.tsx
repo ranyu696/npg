@@ -18,10 +18,8 @@ function generateAntiTheftUrl(url: string, tokenKey: string) {
   const dutestamp = nowstamp + 30 * 1000; // 60秒后过期
   const playCount = 3; // 允许播放3次
   const tokenUrl = `${url}&counts=${playCount}&timestamp=${dutestamp}${tokenKey}`;
-  
   const md5 = createHash('md5');
   const md5Token = md5.update(tokenUrl).digest('hex');
-
   return `${url}?counts=${playCount}&timestamp=${dutestamp}&key=${md5Token}`;
 }
 
@@ -65,16 +63,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 // 页面组件
 export default async function VideoPage({ params }: Props) {
-  const IMG_HOST = process.env.NEXT_PUBLIC_IMG_HOST;
-  const VIDEO_HOST = process.env.NEXT_PUBLIC_VIDEO_HOST
-  const TOKEN_KEY = process.env.TOKEN_KEY || '1q1a1z2q2a2z3q3a3z';
-
   // 获取视频信息
   const video = await fetchVideoById(params.id);
 
-  // 生成防盗链视频 URL 和海报链接
-  const videoURL = generateAntiTheftUrl(`${VIDEO_HOST}${video.m3u8}`, TOKEN_KEY);
-  const posterUrl = `${IMG_HOST}${video.poster2.url}`;
+  // 生成防盗链URL和视频海报链接
+  const tokenKey = process.env.TOKEN_KEY || '1q1a1z2q2a2z3q3a3z';
+  const videoHost = process.env.NEXT_PUBLIC_VIDEO_HOST || '';
+  const imgHost = process.env.NEXT_PUBLIC_IMG_HOST || '';
+
+  const antiTheftPath = generateAntiTheftUrl(`${video.moviepath}`, tokenKey);
+  const videoURL = `${videoHost}${antiTheftPath}`;
+  const posterUrl = `${imgHost}${video.poster2.url}`;
 
   // 获取相关视频
   const relatedVideos = await fetchContents('category', video.category, 'movie,tv', 1, 10, 'countDesc');
