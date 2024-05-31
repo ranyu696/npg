@@ -15,7 +15,7 @@ type Props = {
 // 生成防盗链URL的函数
 function generateAntiTheftUrl(url: string, tokenKey: string) {
   const nowstamp = Date.now(); // 获取当前时间的毫秒数
-  const dutestamp = nowstamp +30 * 1000; // 60秒后过期
+  const dutestamp = nowstamp +60 * 1000; // 60秒后过期
   const playCount = 3; // 允许播放3次
   const tokenUrl = `${url}&counts=${playCount}&timestamp=${dutestamp}${tokenKey}`;
   const md5 = createHash('md5');
