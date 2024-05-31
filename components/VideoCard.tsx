@@ -33,7 +33,6 @@ const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
       <Link href={`/video/${_id}`} prefetch={true}>
       <Image
         loading="lazy"
-        unoptimized
         placeholder="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 300'%3E%3Crect width='100%25' height='100%25' fill='%23f0f0f0'/%3E%3Crect x='0' y='0' width='100%25' height='100%25' fill='%23e0e0e0'%3E%3Canimate attributeName='x' from='-100%25' to='100%25' dur='1s' repeatCount='indefinite'/%3E%3C/rect%3E%3C/svg%3E"
         src={posterUrl}
         alt={originalname}
