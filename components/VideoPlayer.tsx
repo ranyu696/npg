@@ -47,7 +47,7 @@ const VideoPlayer = ({ videoUrl,posterUrl }: VideoPlayerProps) => {
           >
 
             <MediaProvider>
-              <Poster
+            <Poster
                 className="vds-poster"
                 src={posterUrl}
                 alt="视频海报"
