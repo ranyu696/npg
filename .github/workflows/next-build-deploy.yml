@@ -1,5 +1,5 @@
 
-name: Next.js Build and Deploy
+name: 女仆阁自动化
 
 # 定义触发工作流程的事件
 on:
@@ -19,19 +19,16 @@ jobs:
       with:
         node-version: '20.x'
         
-    - name: Install dependencies
+    - name: 安装依赖
       run: npm ci
       
-    - name: Build Next.js app
+    - name: 构建 女仆阁
       run: npm run build
       
-    - name: Export Next.js app
-      run: npm run export
-      
-    - name: Start Next.js app with PM2
+    - name: PM2 运行 女仆阁
       run: |
         npm install -g pm2
-        pm2 start ./server.js -i max --name "next-app" --watch
+        pm2 start ./server.js -i max --name "npg" --watch
       env:
         PORT: 3001
         
