@@ -1,4 +1,3 @@
-
 name: 女仆阁自动化
 
 # 定义触发工作流程的事件
@@ -10,27 +9,27 @@ on:
 jobs:
   build-and-deploy:
     runs-on: self-hosted
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20.x'
-        
-    - name: 安装依赖
-      run: npm ci
-      
-    - name: 构建 女仆阁
-      run: npm run build
-      
-    - name: PM2 运行 女仆阁
-      run: |
-        npm install -g pm2
-        pm2 start ./server.js -i max --name "npg" --watch
-      env:
-        PORT: 3001
-        
-    - name: Health check
-      run: curl http://localhost:3001
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 构建 女仆阁
+        run: npm run build
+
+      - name: PM2 运行 女仆阁
+        run: |
+          npm install -g pm2
+          pm2 start ./server.js -i max --name "npg" --watch
+        env:
+          PORT: 3001
+
+      - name: Health check
+        run: curl http://localhost:3001

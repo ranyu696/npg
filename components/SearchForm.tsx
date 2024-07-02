@@ -1,13 +1,14 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Input } from "@nextui-org/input";
-import { Kbd } from "@nextui-org/kbd";
-import { SearchIcon } from "@/components/icons";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Input } from '@nextui-org/input';
+import { Kbd } from '@nextui-org/kbd';
+
+import { SearchIcon } from '@/components/icons';
 
 const SearchForm = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
 
   const handleSearch = (event: React.FormEvent) => {
@@ -19,11 +20,11 @@ const SearchForm = () => {
     <Input
       aria-label="Search"
       classNames={{
-        inputWrapper: "bg-default-100",
-        input: "text-sm",
+        inputWrapper: 'bg-default-100',
+        input: 'text-sm',
       }}
       endContent={
-        <Kbd className="hidden lg:inline-block" keys={["command"]}>
+        <Kbd className="hidden lg:inline-block" keys={['command']}>
           K
         </Kbd>
       }

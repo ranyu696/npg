@@ -1,129 +1,212 @@
-import { fetchContents, fetchVideoById} from '@/config/api';
-import VideoPlayer from '@/components/VideoPlayer';
-import { Chip } from "@nextui-org/chip";
-import { FcMultipleCameras } from "react-icons/fc";
-import { FcFilm } from "react-icons/fc";
-import ButtonServer from '@/components/ButtonServer';
-import { Metadata } from 'next';
-import VideoCard from '@/components/VideoCard';
-import type { Video } from '@/types/index';
 import { createHash } from 'crypto';
 
-type Props = {
-  params: { id: string };
-};
-// 生成防盗链URL的函数
-function generateAntiTheftUrl(url: string, tokenKey: string) {
-  const nowstamp = Date.now(); // 获取当前时间的毫秒数
-  const dutestamp = nowstamp +60 * 1000; // 60秒后过期
-  const playCount = 3; // 允许播放3次
+import { Metadata } from 'next';
+import Script from 'next/script';
+
+import VideoPlayer from '@/components/VideoPlayer';
+import Breadcrumbs from '@/components/Breadcrumbs';
+import VideoInfo from '@/components/VideoInfo';
+import VideoScreenshots from '@/components/VideoScreenshots';
+import fetchRelatedVideos from '@/config/RelatedVideos';
+import { Video } from '@/types/index';
+import VideoCard from '@/components/VideoCard';
+
+interface VideoPageProps {
+  params: {
+    id: string;
+  };
+}
+
+function generateAntiTheftUrl(
+  currentTimestamp: string,
+  counts: string,
+  url: string,
+  tokenKey: string
+) {
+  const nowstamp = Date.now();
+  const dutestamp = nowstamp + Number(currentTimestamp);
+  const playCount = counts;
   const tokenUrl = `${url}&counts=${playCount}&timestamp=${dutestamp}${tokenKey}`;
   const md5 = createHash('md5');
   const md5Token = md5.update(tokenUrl).digest('hex');
+
   return `${url}?counts=${playCount}&timestamp=${dutestamp}&key=${md5Token}`;
 }
 
-// 生成页面元数据
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const id = params.id;
-  const IMG_HOST = process.env.NEXT_PUBLIC_IMG_HOST;
-  const video = await fetchVideoById(id);
+function extractMinutes(durationStr: string): number {
+  const match = durationStr.match(/(\d+)\s*分钟/);
+
+  return match ? parseInt(match[1], 10) : NaN;
+}
+
+function convertMinutesToISO8601(minutes: number): string {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+
+  return `PT${hours}H${remainingMinutes}M`;
+}
+
+async function getVideoData(id: string): Promise<Video> {
+  let res = await fetch(
+    `https://strapi.xiaoxinlook.cc/api/videos?filters[aka][$eq]=${id}&populate=*`,
+    { next: { revalidate: 60 } }
+  );
+  let data = await res.json();
+
+  if (!data.data || data.data.length === 0) {
+    res = await fetch(
+      `https://strapi.xiaoxinlook.cc/api/videos?filters[video_id][$eq]=${id}&populate=*`,
+      { next: { revalidate: 60 } }
+    );
+    data = await res.json();
+  }
+
+  if (!data.data || data.data.length === 0) {
+    throw new Error('Video not found');
+  }
+
+  return data.data[0];
+}
+
+async function getWebsiteData() {
+  const res = await fetch(
+    'https://strapi.xiaoxinlook.cc/api/websites/2?fields[]=name&fields[]=imageURL&fields[]=videoURL&fields[]=efvtoken&fields[]=counts&fields[]=currentTimestamp&populate[seo][populate][0]=metaSocial'
+  );
+
+  return res.json();
+}
+
+export async function generateMetadata({
+  params,
+}: VideoPageProps): Promise<Metadata> {
+  const video = await getVideoData(params.id);
+  const websiteData = await getWebsiteData();
+
+  const websiteName = websiteData.data.attributes.name;
+  const websiteImageURL = websiteData.data.attributes.imageURL;
+  const seo = websiteData.data.attributes.seo;
 
   return {
-    title: video.title,
-    description: `${video.category} ${video.title} 在线观看`,
-    twitter: {
-      card: 'summary_large_image',
-      title: video.title,
-      description: video.tags,
+    title: `${video.attributes.originalname} - ${websiteName}`,
+    description:
+      video.attributes.aka || `观看 ${video.attributes.originalname} 视频`,
+    openGraph: {
+      title: `${video.attributes.originalname} - ${websiteName}`,
+      description:
+        video.attributes.aka || `观看 ${video.attributes.originalname} 视频`,
+      type: 'video.other',
+      url: `${seo.canonicalURL}/video/${params.id}`,
       images: [
         {
-          url: `${IMG_HOST}${video.poster2.url}`,
-          width: video.poster2.width,
-          height: video.poster2.height,
+          url: `${websiteImageURL}${video.attributes.poster2.url}`,
+          width: video.attributes.poster2.width,
+          height: video.attributes.poster2.height,
+          alt: video.attributes.originalname,
         },
       ],
     },
-    openGraph: {
-      type: 'video.other',
-      title: video.title,
-      url: `/video/${video.id}`,
-      locale: 'zh_CN',
-      description: `${video.category} ${video.title} 在线观看`,
-      images: [
-        {
-          url: `${IMG_HOST}${video.poster2.url}`,
-          width: video.poster2.width,
-          height: video.poster2.height,
-        },
-      ],
+    twitter: {
+      card: 'summary_large_image',
+      title: `${video.attributes.originalname} - ${websiteName}`,
+      description:
+        video.attributes.aka || `观看 ${video.attributes.originalname} 视频`,
+      images: [`${websiteImageURL}${video.attributes.poster2.url}`],
+    },
+    alternates: {
+      canonical: `${seo.canonicalURL}/video/${params.id}`,
     },
   };
 }
 
-// 页面组件
-export default async function VideoPage({ params }: Props) {
-  // 获取视频信息
-  const video = await fetchVideoById(params.id);
+export default async function VideoPage({ params }: VideoPageProps) {
+  const video = await getVideoData(params.id);
+  const websiteData = await getWebsiteData();
 
-  // 生成防盗链URL和视频海报链接
-  const tokenKey = process.env.TOKEN_KEY || '1q1a1z2q2a2z3q3a3z';
-  const videoHost = process.env.NEXT_PUBLIC_VIDEO_HOST || '';
-  const imgHost = process.env.NEXT_PUBLIC_IMG_HOST || '';
+  const websiteImageURL = websiteData.data.attributes.imageURL;
+  const websiteVideoURL = websiteData.data.attributes.videoURL;
+  const seo = websiteData.data.attributes.seo;
+  const efvtoken = websiteData.data.attributes.efvtoken;
+  const counts = websiteData.data.attributes.counts;
+  const currentTimestamp = websiteData.data.attributes.currentTimestamp;
 
-  const antiTheftPath = generateAntiTheftUrl(`${video.m3u8}`, tokenKey);
-  const videoURL = `${videoHost}${antiTheftPath}`;
-  const posterUrl = `${imgHost}${video.poster2.url}`;
+  const antiTheftUrl = generateAntiTheftUrl(
+    currentTimestamp,
+    counts,
+    video.attributes.m3u8paths.path,
+    efvtoken
+  );
 
-  // 获取相关视频
-  const relatedVideos = await fetchContents('category', video.category, 'movie,tv', 1, 10, 'countDesc');
+  const CategoryName = video.attributes.category.data.attributes.name;
+  const relatedVideos = await fetchRelatedVideos(video, 10);
+
+  const durationInMinutes = extractMinutes(video.attributes.duration);
+  const isoDuration = convertMinutesToISO8601(durationInMinutes);
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: video.attributes.originalname,
+    description:
+      video.attributes.aka || `观看 ${video.attributes.originalname} 视频`,
+    thumbnailUrl: `${websiteImageURL}${video.attributes.poster2.url}`,
+    uploadDate: video.attributes.createdAt,
+    duration: isoDuration,
+    contentUrl: `${websiteVideoURL}${antiTheftUrl}`,
+    embedUrl: `${seo.canonicalURL}/video/${params.id}`,
+    interactionStatistic: {
+      '@type': 'InteractionCounter',
+      interactionType: { '@type': 'WatchAction' },
+      userInteractionCount: video.attributes.count,
+    },
+  };
 
   return (
-    <section className="flex flex-col items-center justify-center gap-4 py-2 md:py-6">
-    <div className="flex flex-wrap min-h-screen sm:px-4">
-      <div className="w-full lg:w-3/4">
-        {/* 视频播放器 */}
-        <VideoPlayer videoUrl={videoURL} posterUrl={posterUrl} />
-
-        {/* 视频标题和复制网址按钮 */}
-        <div className="mt-4 flex items-center justify-between">
-          <h1 className="text-base lg:text-lg text-nord6 flex-grow">{video.title}</h1>
-          <ButtonServer>点击复制网址</ButtonServer>
+    <>
+      <Script
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        id="jsonld-video"
+        type="application/ld+json"
+      />
+      <section className="py-4">
+        <h1 className="text-2xl font-bold mb-2">
+          {video.attributes.originalname}
+        </h1>
+        <div className="mb-2">
+          <Breadcrumbs />
         </div>
-
-        {/* 视频统计信息 */}
-        <div className="mt-4">
-          <Chip startContent={<FcMultipleCameras size={18} />} variant="faded" color="success">
-            {video.count}次
-          </Chip>
-          <Chip startContent={<FcFilm size={18} />} variant="faded" color="success">
-            {video.category}
-          </Chip>
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className="lg:w-3/4">
+            <VideoPlayer
+              title={video.attributes.originalname}
+              videoId={video.id}
+              videoPoster={`${websiteImageURL}${video.attributes.poster2.url}`}
+              videoURL={`${websiteVideoURL}${antiTheftUrl}`}
+            />
+          </div>
+          <div className="lg:w-1/4">
+            <VideoInfo video={video} websiteImageURL={websiteImageURL} />
+          </div>
         </div>
-
-        {/* 视频摘要 */}
-        <p className="mt-4">{video.summary}</p>
-
-        {/* 相关视频推荐 */}
         <div className="mt-8">
-          <h2 className='font-bold text-lg border-rose-500 border-l-4 pl-3'>智能推荐</h2>
-          <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-4 xl:gap-8 mt-4'>
-            {video.likes.map((video: Video) => (
-              <VideoCard key={video._id} video={video} />
+          <VideoScreenshots
+            screenshots={video.attributes.screenshots}
+            websiteImageURL={websiteImageURL}
+          />
+        </div>
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4">相关推荐</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-2">
+            {relatedVideos.map((video) => (
+              <VideoCard
+                key={video.id}
+                category={CategoryName}
+                video={video}
+                websiteImageURL={websiteImageURL}
+              />
             ))}
           </div>
         </div>
-      </div>
-
-      {/* 侧边栏相关视频 */}
-      <div className="w-full lg:w-1/4 p-3 hidden lg:block">
-        <div className="flex-col mb-6">
-          {relatedVideos.map((video: Video) => (
-            <VideoCard key={video._id} video={video} />
-          ))}
-        </div>
-      </div>
-      </div>
-		</section>
+      </section>
+    </>
   );
 }

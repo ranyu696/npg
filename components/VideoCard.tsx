@@ -1,58 +1,85 @@
-// VideoCard.tsx
-
 import React from 'react';
-import Link from 'next/link'
-import Image from 'next/image'
-import type { Video } from '@/types/index';
+import { Card, CardFooter } from '@nextui-org/card';
+import Image from 'next/image';
+import Link from 'next/link';
+import { AiFillEye } from 'react-icons/ai';
+import { RiTimeLine } from 'react-icons/ri';
 
+import { Video } from '@/types/index';
 
-type VideoCardProps = {
+interface VideoCardProps {
   video: Video;
-};
+  websiteImageURL: string;
+  category: string;
+}
 
-const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
-  const { originalname, poster2, _id,poster, duration } = video;
-  const IMG_HOST = process.env.NEXT_PUBLIC_IMG_HOST;
-  const posterUrl = `${IMG_HOST}${poster2 ? poster2.url : poster}`;
-  const posterwidth = poster2 && poster2.width ? poster2.width : 850;
-  const posterheight = poster2 && poster2.height ? poster2.height : 500;
-  // 视频时长处理
-  const match = duration.match(/\d+/);
-  const durationInMinutes = match ? parseInt(match[0], 10) : 0;
-  const hours = Math.floor(durationInMinutes / 60);
-  const minutes = durationInMinutes % 60;
-  const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
+const VideoCard: React.FC<VideoCardProps> = ({
+  video,
+  websiteImageURL,
+  category,
+}) => {
+  // 生成视频链接
+  const videoLink = React.useMemo(() => {
+    if (video.attributes?.aka) {
+      return `/video/${video.attributes.aka}`;
+    }
+    if (video.attributes?.video_id) {
+      return `/video/${video.attributes.video_id}`;
+    }
+    if (typeof video.id === 'string' || typeof video.id === 'number') {
+      return `/video/${video.id}`;
+    }
+
+    return '/videos'; // 默认链接，可以改为您的视频列表页面
+  }, [video]);
 
   return (
-    <div className="thumbnail group">
-    <div className="relative aspect-w-16 aspect-h-9 rounded overflow-hidden shadow-lg">
-      <span className="absolute bottom-1 right-1 rounded-lg px-2 py-1 text-xs text-white bg-white/30 backdrop-blur-sm">
-        {time}
-      </span>
-      <Link href={`/video/${_id}`} prefetch={true}>
-      <Image
-        loading="lazy"
-        placeholder="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 300'%3E%3Crect width='100%25' height='100%25' fill='%23f0f0f0'/%3E%3Crect x='0' y='0' width='100%25' height='100%25' fill='%23e0e0e0'%3E%3Canimate attributeName='x' from='-100%25' to='100%25' dur='1s' repeatCount='indefinite'/%3E%3C/rect%3E%3C/svg%3E"
-        src={posterUrl}
-        alt={originalname}
-        width={posterwidth} // 确保提供适当的尺寸
-        height={posterheight} // 确保提供适当的尺寸
-        className="object-cover w-full h-full"
-      />
+    <Card
+      isBlurred
+      isPressable
+      className="border-none break-inside-avoid mb-1 s:mb-1.5 m:mb-2.5 sm:mb-3.5 md:mb-4"
+      radius="sm"
+    >
+      <Link href={videoLink}>
+        <div className="relative">
+          <Image
+            alt={video.attributes.originalname}
+            className="object-cover rounded-xl"
+            height={video.attributes.poster2.height}
+            src={`${websiteImageURL}${video.attributes.poster2.url}`}
+            width={video.attributes.poster2.width}
+          />
+          <div className="absolute top-2 left-2 z-10">
+            <span className="bg-primary text-white px-1 py-0.5 text-xs sm:px-2 sm:py-1 sm:text-sm rounded">
+              {category}
+            </span>
+          </div>
+          <div className="absolute top-2 right-2 z-10">
+            <span className="bg-success text-white px-1 py-0.5 text-xs sm:px-2 sm:py-1 sm:text-sm rounded">
+              HD
+            </span>
+          </div>
+          <div className="absolute bottom-2 left-2 z-10 flex items-center">
+            <span className="text-white px-1 py-0.5 text-xs sm:px-2 sm:py-1 sm:text-sm bg-black bg-opacity-50 rounded flex items-center">
+              <AiFillEye className="sm:size-18 mr-1" size={14} />
+              {video.attributes.count}
+            </span>
+          </div>
+          <div className="absolute bottom-2 right-2 z-10 flex items-center">
+            <span className="text-white px-1 py-0.5 text-xs sm:px-2 sm:py-1 sm:text-sm bg-black bg-opacity-50 rounded flex items-center">
+              <RiTimeLine className="sm:size-18 text-white mr-1" size={14} />
+              {video.attributes.duration}
+            </span>
+          </div>
+        </div>
+        <CardFooter className="justify-between overflow-hidden py-1 rounded-large w-full shadow-small z-10 bg-white/10 border-white/20 border-1">
+          <p className="text-tiny text-black/80 dark:text-white/80 line-clamp-1">
+            {video.attributes.originalname}
+          </p>
+        </CardFooter>
       </Link>
-
-      
-    </div>
-    <div className="my-2 text-sm text-nord4 truncate">
-    <Link href={`/video/${_id}`} prefetch={true}>
-      <p className="text-secondary group-hover:text-primary">
-        {originalname}
-      </p>
-      </Link>
-    </div>
-    </div>
+    </Card>
   );
 };
-
 
 export default VideoCard;

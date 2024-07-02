@@ -1,125 +1,93 @@
 import {
-	Navbar as NextUINavbar,
-	NavbarContent,
-	NavbarMenu,
-	NavbarMenuToggle,
-	NavbarBrand,
-	NavbarItem,
-	NavbarMenuItem,
-} from "@nextui-org/navbar";
-import {Divider} from "@nextui-org/divider";
-import { Button } from "@nextui-org/button";
-import Link from 'next/link'
+  Navbar as NextUINavbar,
+  NavbarContent,
+  NavbarMenuToggle,
+  NavbarBrand,
+  NavbarItem,
+} from '@nextui-org/navbar';
+import { Button } from '@nextui-org/button';
+import { link as linkStyles } from '@nextui-org/theme';
+import NextLink from 'next/link';
+import clsx from 'clsx';
+import { FaHome } from 'react-icons/fa';
+import Image from 'next/image';
+import { headers } from 'next/headers';
 
-
-import { link as linkStyles } from "@nextui-org/theme";
-
-import { siteConfig } from "@/config/site";
-import NextLink from "next/link";
-import clsx from "clsx";
-
-import { ThemeSwitch } from "@/components/theme-switch";
-import {
-	TwitterIcon,
-	GithubIcon,
-	DiscordIcon,
-	HeartFilledIcon,
-	SearchIcon,
-} from "@/components/icons";
-
-import { Logo } from "@/components/icons";
+import { ThemeSwitch } from '@/components/theme-switch';
 import SearchForm from '@/components/SearchForm';
+import { Category } from '@/types';
 
-export const Navbar = () => {
+import NavMenu from './NavMenu';
+import FavoriteButton from './FavoriteButton';
 
-	return (
-		<NextUINavbar maxWidth="2xl" position="sticky">
-			<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
-				<NavbarBrand as="li" className="gap-3 max-w-fit">
-					<NextLink className="flex justify-start items-center gap-1" href="/">
-						<Logo />
-						<p className="font-bold text-inherit">女仆阁</p>
-					</NextLink>
-				</NavbarBrand>
-				<ul className="hidden lg:flex gap-4 justify-start ml-2">
-					{siteConfig.navItems.map((item) => (
-						<NavbarItem key={item.href}>
-							<NextLink
-								className={clsx(
-									linkStyles({ color: "foreground" }),
-									"data-[active=true]:text-primary data-[active=true]:font-medium"
-								)}
-								color="foreground"
-								href={item.href}
-							>
-								{item.label}
-							</NextLink>
-						</NavbarItem>
-					))}
-				</ul>
-			</NavbarContent>
+// 定义 categories 的 TypeScript 接口
 
-			<NavbarContent
-				className="hidden sm:flex basis-1/5 sm:basis-full"
-				justify="end"
-			>
-				<NavbarItem className="hidden sm:flex gap-2">
-					<Link  href={siteConfig.links.twitter} aria-label="Twitter">
-						<TwitterIcon className="text-default-500" />
-					</Link>
-					<Link  href={siteConfig.links.discord} aria-label="Discord">
-						<DiscordIcon className="text-default-500" />
-					</Link>
-					<Link  href={siteConfig.links.github} aria-label="Github">
-						<GithubIcon className="text-default-500" />
-					</Link>
-					<ThemeSwitch />
-				</NavbarItem>
-				<NavbarItem className="hidden lg:flex"><SearchForm /></NavbarItem>
-				<NavbarItem className="hidden md:flex">
-					<Button
-            
-						as={Link}
-						className="text-sm font-normal text-default-600 bg-default-100"
-						href={siteConfig.links.sponsor}
-						startContent={<HeartFilledIcon className="text-danger" />}
-						variant="flat"
-					>
-						Sponsor
-					</Button>
-				</NavbarItem>
-			</NavbarContent>
+interface NavbarProps {
+  categories: Category[];
+}
+export const Navbar: React.FC<NavbarProps> = ({ categories }) => {
+  const headersList = headers();
+  const userAgent = headersList.get('user-agent') || '';
 
-			<NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-				<Link href={siteConfig.links.github} aria-label="Github">
-					<GithubIcon className="text-default-500" />
-				</Link>
-				<ThemeSwitch />
-				<NavbarMenuToggle />
-			</NavbarContent>
+  return (
+    <NextUINavbar maxWidth="xl" position="sticky">
+      <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
+        <NavbarBrand as="li" className="gap-3 max-w-fit">
+          <NextLink className="flex justify-start items-center gap-1" href="/">
+            <span className="flex relative justify-center items-center box-border overflow-hidden align-middle z-0 outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 w-10 h-10 text-tiny bg-default text-default-foreground rounded-small">
+              <Image
+                alt="avatar"
+                className="flex object-cover w-full h-full transition-opacity !duration-500 opacity-0 data-[loaded=true]:opacity-100"
+                data-loaded="true"
+                height={192}
+                src="/icon-192x192.png"
+                width={192}
+              />
+            </span>
+          </NextLink>
+        </NavbarBrand>
+        <ul className="hidden lg:flex gap-4 justify-start ml-2">
+          {categories.map((category) => (
+            <NavbarItem key={category.id}>
+              <NextLink
+                className={clsx(
+                  linkStyles({ color: 'foreground' }),
+                  'data-[active=true]:text-primary data-[active=true]:font-medium'
+                )}
+                color="foreground"
+                href={`/category/${category.attributes.slug}`}
+              >
+                {category.attributes.name}
+              </NextLink>
+            </NavbarItem>
+          ))}
+        </ul>
+      </NavbarContent>
 
-			<NavbarMenu>
-			<SearchForm />
-			<div className="mx-4 mt-2 grid grid-cols-2 gap-2">
-					{siteConfig.navItems.map((item, index) => (
-						<NavbarMenuItem key={`${item}-${index}`}>
-							<Link href={item.href} aria-label={item.label} prefetch={true}>
-							{item.label}
-							</Link>
-						</NavbarMenuItem>
-					))}
-				</div>
-				<Divider className="my-4" />
-			<div className="mx-4 mt-2 grid grid-cols-2 gap-2">
-					{siteConfig.navMenuItems.map((item, index) => (
-						<NavbarMenuItem key={`${item}-${index}`}>
-							<Link href={item.href} aria-label={item.label} prefetch={true}>
-							{item.label}
-							</Link>
-						</NavbarMenuItem>
-					))}
-				</div>
-			</NavbarMenu>
-		</NextUINavbar>
-	);
+      <NavbarContent
+        className="hidden sm:flex basis-1/5 sm:basis-full"
+        justify="end"
+      >
+        <NavbarItem className="hidden sm:flex gap-2">
+          <ThemeSwitch />
+        </NavbarItem>
+        <NavbarItem className="hidden lg:flex">
+          <SearchForm />
+        </NavbarItem>
+        <NavbarItem className="hidden md:flex">
+          <FavoriteButton userAgent={userAgent} />
+        </NavbarItem>
+      </NavbarContent>
+
+      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
+        <Button isIconOnly color="primary">
+          <FaHome />
+        </Button>
+        <FavoriteButton userAgent={userAgent} />
+        <ThemeSwitch />
+        <NavbarMenuToggle />
+      </NavbarContent>
+      <NavMenu categories={categories} />
+    </NextUINavbar>
+  );
 };
