@@ -57,7 +57,7 @@ async function getSearchResults(
     .map((id) => `filters[category][id][$in]=${id}`)
     .join('&');
   const response = await fetch(
-    `https://strapi.xiaoxinlook.cc/api/videos?${categoryFilter}&filters[$or][0][originalname][$containsi]=${query}&filters[$or][1][aka][$containsi]=${query}&populate[poster2][fields][0]=url&populate[poster2][fields][1]=width&populate[poster2][fields][2]=height&populate[category][fields][0]=name&pagination[page]=${page}&pagination[pageSize]=12`
+    `http://127.0.0.1:1337/api/videos?${categoryFilter}&filters[$or][0][originalname][$containsi]=${query}&filters[$or][1][aka][$containsi]=${query}&populate[poster2][fields][0]=url&populate[poster2][fields][1]=width&populate[poster2][fields][2]=height&populate[category][fields][0]=name&pagination[page]=${page}&pagination[pageSize]=12`
   );
 
   if (!response.ok) {

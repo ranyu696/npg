@@ -14,7 +14,7 @@ interface TabContentProps {
 
 async function getVideos(slug: string) {
   const resVideos = await fetch(
-    `https://strapi.xiaoxinlook.cc/api/videos?filters[category][slug][$eq]=${slug}&pagination[pageSize]=20&fields[0]=originalname&fields[1]=duration&fields[2]=aka&fields[3]=count&populate[poster2][fields][0]=url&populate[poster2][fields][1]=width&populate[poster2][fields][2]=height&populate[category][fields][0]=name`,
+    `http://127.0.0.1:1337/api/videos?filters[category][slug][$eq]=${slug}&pagination[pageSize]=20&fields[0]=originalname&fields[1]=duration&fields[2]=aka&fields[3]=count&populate[poster2][fields][0]=url&populate[poster2][fields][1]=width&populate[poster2][fields][2]=height&populate[category][fields][0]=name`,
     { next: { revalidate: 60 } }
   );
 
@@ -27,7 +27,7 @@ async function getVideos(slug: string) {
 
 async function getWebsite() {
   const resWebsite = await fetch(
-    'https://strapi.xiaoxinlook.cc/api/websites/2?fields[0]=name&fields=imageURL',
+    'http://127.0.0.1:1337/api/websites/2?fields[0]=name&fields=imageURL',
     { next: { revalidate: 60 } }
   );
 

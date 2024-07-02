@@ -23,7 +23,7 @@ export const viewport: Viewport = {
 
 export async function generateMetadata(): Promise<Metadata> {
   const response = await fetch(
-    'https://strapi.xiaoxinlook.cc/api/websites/2?fields[0]=name&populate[seo][populate][0]=metaSocial&populate[seo][populate][1]=BasicFields&populate[seo][populate][2]=formatDetection&populate[seo][populate][3]=metaRobots'
+    'http://127.0.0.1:1337/api/websites/2?fields[0]=name&populate[seo][populate][0]=metaSocial&populate[seo][populate][1]=BasicFields&populate[seo][populate][2]=formatDetection&populate[seo][populate][3]=metaRobots'
   );
   const data = await response.json();
   const seo = data?.data?.attributes?.seo || {};
@@ -108,10 +108,10 @@ export default async function RootLayout({
 }) {
   const [resCategory, resWebsite] = await Promise.all([
     fetch(
-      'https://strapi.xiaoxinlook.cc/api/categories?populate=subcategories.*&filters[isCategory][$eq]=true&filters[website][$in][0]=2'
+      'http://127.0.0.1:1337/api/categories?populate=subcategories.*&filters[isCategory][$eq]=true&filters[website][$in][0]=2'
     ),
     fetch(
-      'https://strapi.xiaoxinlook.cc/api/websites/2?fields[0]=googleAnalyticsId&fields[1]=email&fields[2]=PPURL&fields[3]=MetrikaID&fields[4]=advertisementCode&fields[5]=announcement&populate[links][fields]=*&populate[advertisement_banners][fields][1]=name&populate[advertisement_banners][fields][2]=url&populate[advertisement_banners][fields][3]=order&populate[advertisement_banners][populate][image][fields][0]=url&populate[advertisement_banners][populate][image][fields][1]=width&populate[advertisement_banners][populate][image][fields][2]=height'
+      'http://127.0.0.1:1337/api/websites/2?fields[0]=googleAnalyticsId&fields[1]=email&fields[2]=PPURL&fields[3]=MetrikaID&fields[4]=advertisementCode&fields[5]=announcement&populate[links][fields]=*&populate[advertisement_banners][fields][1]=name&populate[advertisement_banners][fields][2]=url&populate[advertisement_banners][fields][3]=order&populate[advertisement_banners][populate][image][fields][0]=url&populate[advertisement_banners][populate][image][fields][1]=width&populate[advertisement_banners][populate][image][fields][2]=height'
     ),
   ]);
 

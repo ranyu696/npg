@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardBody } from '@nextui-org/card';
-import Image from 'next/image';
+import { Image } from "@nextui-org/image";
 import { Modal, ModalContent, ModalBody } from '@nextui-org/modal';
 import { Slider } from '@nextui-org/slider';
 
@@ -71,7 +71,7 @@ const VideoScreenshots: React.FC<VideoScreenshotsProps> = ({
                 className="snap-start flex-shrink-0 w-4/5 md:w-1/2 lg:w-1/3"
               >
                 <Image
-                  fill
+                  isBlurred
                   alt={`Screenshot ${index + 1}`}
                   className="object-cover w-full h-auto cursor-pointer rounded-lg shadow-md"
                   src={`${websiteImageURL}${screenshot.url}`}

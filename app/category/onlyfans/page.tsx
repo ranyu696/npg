@@ -8,7 +8,7 @@ interface CategoryPageProps {
 
 async function getCategories() {
   const res = await fetch(
-    `https://strapi.xiaoxinlook.cc/api/categories/49?populate=subcategories.*`,
+    `http://127.0.0.1:1337/api/categories/49?populate=subcategories.*`,
     { next: { revalidate: 60 } }
   );
 

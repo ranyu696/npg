@@ -9,7 +9,7 @@ import Pagination from '@/components/Pagination';
 // 数据获取函数
 async function fetchCategoryData(slug: string) {
   const res = await fetch(
-    `https://strapi.xiaoxinlook.cc/api/categories?filters[slug][$eq]=${slug}`
+    `http://127.0.0.1:1337/api/categories?filters[slug][$eq]=${slug}`
   );
 
   if (!res.ok) throw new Error('Failed to fetch category data');
@@ -19,7 +19,7 @@ async function fetchCategoryData(slug: string) {
 
 async function fetchWebsiteData() {
   const res = await fetch(
-    'https://strapi.xiaoxinlook.cc/api/websites/2?fields[0]=name&fields=imageURL&populate[seo][populate][0]=metaSocial'
+    'http://127.0.0.1:1337/api/websites/2?fields[0]=name&fields=imageURL&populate[seo][populate][0]=metaSocial'
   );
 
   if (!res.ok) throw new Error('Failed to fetch website data');
@@ -33,7 +33,7 @@ async function fetchVideos(
   pageSize: number
 ) {
   const res = await fetch(
-    `https://strapi.xiaoxinlook.cc/api/videos?filters[category][id][$eq]=${categoryId}&pagination[page]=${pageNumber}&pagination[pageSize]=${pageSize}&fields[0]=originalname&fields[1]=duration&fields[2]=aka&fields[3]=count&fields[4]=video_id&populate[poster2][fields][0]=url&populate[poster2][fields][1]=width&populate[poster2][fields][2]=height&populate[category][fields][0]=name`
+    `http://127.0.0.1:1337/api/videos?filters[category][id][$eq]=${categoryId}&pagination[page]=${pageNumber}&pagination[pageSize]=${pageSize}&fields[0]=originalname&fields[1]=duration&fields[2]=aka&fields[3]=count&fields[4]=video_id&populate[poster2][fields][0]=url&populate[poster2][fields][1]=width&populate[poster2][fields][2]=height&populate[category][fields][0]=name`
   );
 
   if (!res.ok) throw new Error('Failed to fetch videos');

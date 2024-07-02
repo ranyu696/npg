@@ -13,7 +13,7 @@ interface LayoutProps {
 
 async function getCategories() {
   const res = await fetch(
-    `https://strapi.xiaoxinlook.cc/api/categories/48?populate=subcategories.*`,
+    `http://127.0.0.1:1337/api/categories/48?populate=subcategories.*`,
     { next: { revalidate: 60 } }
   );
 
@@ -28,7 +28,7 @@ async function getCategories() {
 
 async function getWebsiteInfo() {
   const res = await fetch(
-    'https://strapi.xiaoxinlook.cc/api/websites/2?fields[0]=name&fields[1]=imageURL&populate[seo][fields][0]=canonicalURL',
+    'http://127.0.0.1:1337/api/websites/2?fields[0]=name&fields[1]=imageURL&populate[seo][fields][0]=canonicalURL',
     { next: { revalidate: 60 } }
   );
 

@@ -2,7 +2,7 @@ import qs from 'qs';
 
 import { Video, Category, ApiResponse } from '@/types/index';
 
-const API_URL = 'https://strapi.xiaoxinlook.cc/api';
+const API_URL = 'http://127.0.0.1:1337/api';
 
 // 定义查询参数的接口
 interface QueryParams {
@@ -92,7 +92,7 @@ async function fetchData<T>(
 
 // 定义通用的视频查询参数
 const commonVideoParams = {
-  fields: ['originalname', 'aka', 'duration', 'count'],
+  fields: ['originalname', 'aka', 'duration', 'count', 'video_id'],
   populate: {
     poster2: {
       fields: ['url', 'width', 'height'],
@@ -165,7 +165,7 @@ export async function getCategories(
         fields: ['url'],
       },
       videos: {
-        fields: ['originalname', 'aka', 'duration', 'count'],
+        fields: ['originalname', 'aka', 'duration', 'count', 'video_id'],
         populate: {
           poster2: {
             fields: ['url', 'width', 'height'],

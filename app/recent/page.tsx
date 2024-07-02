@@ -17,7 +17,7 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const page = parseInt(params.page) || 1;
   const websiteRes = await fetch(
-    'https://strapi.xiaoxinlook.cc/api/websites/2?fields[0]=name&populate[seo][fields][0]=canonicalURL'
+    'http://127.0.0.1:1337/api/websites/2?fields[0]=name&populate[seo][fields][0]=canonicalURL'
   );
   const websiteData = await websiteRes.json();
   const websiteName = websiteData.data.attributes.name;
@@ -47,7 +47,7 @@ export default async function RecentVideosPage({ params }: PageProps) {
   const [videosData, websiteData] = await Promise.all([
     getRecentVideos(websiteId, pageSize, page),
     fetch(
-      'https://strapi.xiaoxinlook.cc/api/websites/2?fields[0]=imageURL&fields[1]=name&populate[seo][fields][0]=canonicalURL'
+      'http://127.0.0.1:1337/api/websites/2?fields[0]=imageURL&fields[1]=name&populate[seo][fields][0]=canonicalURL'
     ).then((res) => res.json()),
   ]);
 

@@ -48,14 +48,14 @@ function convertMinutesToISO8601(minutes: number): string {
 
 async function getVideoData(id: string): Promise<Video> {
   let res = await fetch(
-    `https://strapi.xiaoxinlook.cc/api/videos?filters[aka][$eq]=${id}&populate=*`,
+    `http://127.0.0.1:1337/api/videos?filters[aka][$eq]=${id}&populate=*`,
     { next: { revalidate: 60 } }
   );
   let data = await res.json();
 
   if (!data.data || data.data.length === 0) {
     res = await fetch(
-      `https://strapi.xiaoxinlook.cc/api/videos?filters[video_id][$eq]=${id}&populate=*`,
+      `http://127.0.0.1:1337/api/videos?filters[video_id][$eq]=${id}&populate=*`,
       { next: { revalidate: 60 } }
     );
     data = await res.json();
@@ -70,7 +70,7 @@ async function getVideoData(id: string): Promise<Video> {
 
 async function getWebsiteData() {
   const res = await fetch(
-    'https://strapi.xiaoxinlook.cc/api/websites/2?fields[]=name&fields[]=imageURL&fields[]=videoURL&fields[]=efvtoken&fields[]=counts&fields[]=currentTimestamp&populate[seo][populate][0]=metaSocial'
+    'http://127.0.0.1:1337/api/websites/2?fields[]=name&fields[]=imageURL&fields[]=videoURL&fields[]=efvtoken&fields[]=counts&fields[]=currentTimestamp&populate[seo][populate][0]=metaSocial'
   );
 
   return res.json();

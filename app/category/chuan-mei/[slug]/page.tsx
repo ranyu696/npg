@@ -26,7 +26,7 @@ async function getVideos(slug: string) {
 
 async function getWebsite() {
   const resWebsite = await fetch(
-    'https://strapi.xiaoxinlook.cc/api/websites/2?fields[0]=name&fields=imageURL',
+    'http://127.0.0.1:1337/api/websites/2?fields[0]=name&fields=imageURL',
     { next: { revalidate: 60 } }
   );
 

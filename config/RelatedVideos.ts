@@ -9,9 +9,9 @@ async function fetchRelatedVideos(
 
   try {
     const response = await fetch(
-      `https://strapi.xiaoxinlook.cc/api/videos?filters[category][name][$eq]=${encodeURIComponent(categoryName)}` +
+      `http://127.0.0.1:1337/api/videos?filters[category][name][$eq]=${encodeURIComponent(categoryName)}` +
         `&filters[id][$ne]=${currentVideoId}` + // 排除当前视频
-        `&fields[0]=originalname&fields[1]=duration&fields[2]=aka&fields[3]=count` +
+        `&fields[0]=originalname&fields[1]=duration&fields[2]=aka&fields[3]=count&fields[4]=video_id` +
         `&populate[poster2][fields][0]=url&populate[poster2][fields][1]=width&populate[poster2][fields][2]=height` +
         `&populate[category][fields][0]=name` +
         `&random=true` + // 使用 Strapi 的随机排序
