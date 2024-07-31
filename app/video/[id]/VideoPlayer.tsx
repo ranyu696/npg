@@ -18,7 +18,7 @@ type VideoPlayerProps = {
   videoURL: string;
   title: string;
   videoPoster: string;
-  videoId: string;
+  videoId: number;
 };
 
 export default function VideoPlayer({
@@ -38,7 +38,7 @@ export default function VideoPlayer({
     }
   }
 
-  async function incrementPlayCount(videoId: string) {
+  async function incrementPlayCount(videoId: number) {
     const apiUrl = `/api/videos?id=${videoId}`;
 
     try {

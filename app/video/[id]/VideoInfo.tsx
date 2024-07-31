@@ -5,23 +5,7 @@ import React from 'react';
 import { FaFacebookF, FaTwitter, FaLink, FaDiscord } from 'react-icons/fa';
 
 interface VideoInfoProps {
-  video: {
-    attributes: {
-      screenshots: any;
-      originalname: string;
-      count: number;
-      duration: string;
-      aka?: string;
-      gif: string;
-      category: {
-        data: {
-          attributes: {
-            name: string;
-          };
-        };
-      };
-    };
-  };
+  video:Video;
   websiteImageURL: string;
 }
 

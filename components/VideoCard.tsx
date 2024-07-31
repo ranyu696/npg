@@ -1,11 +1,9 @@
 import React from 'react';
-import { Card, CardFooter } from '@nextui-org/card';
+import { Card, CardBody, CardFooter } from '@nextui-org/card';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AiFillEye } from 'react-icons/ai';
 import { RiTimeLine } from 'react-icons/ri';
-
-import { Video } from '@/types/index';
 
 interface VideoCardProps {
   video: Video;
@@ -37,11 +35,12 @@ const VideoCard: React.FC<VideoCardProps> = ({
     <Card
       isBlurred
       isPressable
-      className="border-none break-inside-avoid mb-1 s:mb-1.5 m:mb-2.5 sm:mb-3.5 md:mb-4"
+      className="mb-1 s:mb-1.5 m:mb-2.5 sm:mb-3.5 md:mb-4"
       radius="sm"
     >
+        <CardBody className="p-0">
       <Link href={videoLink}>
-        <div className="relative">
+        <div className="relative w-full aspect-video">
           <Image
             alt={video.attributes.originalname}
             className="object-cover rounded-xl"
@@ -72,12 +71,13 @@ const VideoCard: React.FC<VideoCardProps> = ({
             </span>
           </div>
         </div>
+        </Link>
+        </CardBody>
         <CardFooter className="justify-between overflow-hidden py-1 rounded-large w-full shadow-small z-10 bg-white/10 border-white/20 border-1">
           <p className="text-tiny text-black/80 dark:text-white/80 line-clamp-1">
             {video.attributes.originalname}
           </p>
         </CardFooter>
-      </Link>
     </Card>
   );
 };

@@ -14,11 +14,11 @@ import Image from 'next/image';
 import { headers } from 'next/headers';
 
 import { ThemeSwitch } from '@/components/theme-switch';
-import SearchForm from '@/components/SearchForm';
-import { Category } from '@/types';
+import SearchForm from '@/components/Nav/SearchForm';
 
 import NavMenu from './NavMenu';
 import FavoriteButton from './FavoriteButton';
+import NavbarItemComponent from './NavbarItem';
 
 // 定义 categories 的 TypeScript 接口
 
@@ -36,7 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({ categories }) => {
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <span className="flex relative justify-center items-center box-border overflow-hidden align-middle z-0 outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 w-10 h-10 text-tiny bg-default text-default-foreground rounded-small">
               <Image
-                alt="avatar"
+                alt="网站图标"
                 className="flex object-cover w-full h-full transition-opacity !duration-500 opacity-0 data-[loaded=true]:opacity-100"
                 data-loaded="true"
                 height={192}
@@ -47,19 +47,8 @@ export const Navbar: React.FC<NavbarProps> = ({ categories }) => {
           </NextLink>
         </NavbarBrand>
         <ul className="hidden lg:flex gap-4 justify-start ml-2">
-          {categories.map((category) => (
-            <NavbarItem key={category.id}>
-              <NextLink
-                className={clsx(
-                  linkStyles({ color: 'foreground' }),
-                  'data-[active=true]:text-primary data-[active=true]:font-medium'
-                )}
-                color="foreground"
-                href={`/category/${category.attributes.slug}`}
-              >
-                {category.attributes.name}
-              </NextLink>
-            </NavbarItem>
+        {categories.map((category) => (
+            <NavbarItemComponent key={category.id} category={category} /> // 使用 NavbarItemComponent 替换重复的逻辑
           ))}
         </ul>
       </NavbarContent>

@@ -4,7 +4,7 @@ export async function GET() {
   try {
     const res = await fetch(
       'https://strapi.xiaoxinlook.cc/api/websites/1?fields[]=announcement',
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 60 } }
     );
     const data = await res.json();
 

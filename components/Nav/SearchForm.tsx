@@ -13,7 +13,7 @@ const SearchForm = () => {
 
   const handleSearch = (event: React.FormEvent) => {
     event.preventDefault();
-    router.push(`/search/${encodeURIComponent(searchTerm)}`);
+    router.push(`/search?q=${encodeURIComponent(searchTerm)}`);
   };
 
   const searchInput = (

@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { NavbarMenu, NavbarMenuItem } from '@nextui-org/navbar';
 
-import { Category, SubCategory } from '@/types/index';
 
 import SearchForm from './SearchForm';
 
@@ -23,11 +22,11 @@ const NavMenu: React.FC<{ categories: Category[] }> = ({ categories }) => {
             category.attributes.subcategories.data.length > 0 ? (
               <div className="grid grid-cols-2 gap-2">
                 {category.attributes.subcategories.data.map(
-                  (subCategory: SubCategory) => (
+                  (subCategory: Category) => (
                     <NavbarMenuItem key={subCategory.id}>
                       <Link
                         className="w-full"
-                        href={`/category/${category.attributes.slug}/${subCategory.attributes.slug}`}
+                        href={`/category/${category.attributes.name}`}
                       >
                         {subCategory.attributes.name}
                       </Link>
@@ -39,7 +38,7 @@ const NavMenu: React.FC<{ categories: Category[] }> = ({ categories }) => {
               <NavbarMenuItem>
                 <Link
                   className="w-full"
-                  href={`/category/${category.attributes.slug}`}
+                  href={`/category/${category.attributes.name}`}
                 >
                   查看所有 {category.attributes.name}
                 </Link>

@@ -1,30 +1,10 @@
 import React from 'react';
 import Image from 'next/image';
 
-interface BannerImage {
-  id: number;
-  attributes: {
-    url: string;
-    width: number;
-    height: number;
-  };
-}
-
-interface Banner {
-  id: number;
-  attributes: {
-    name: string;
-    url: string;
-    order: string;
-    image: {
-      data: BannerImage[];
-    };
-  };
-}
 
 interface AdBannerProps {
   banners: {
-    data: Banner[];
+    data: AdvertisementBanner[];
   };
   baseUrl: string;
 }
@@ -61,8 +41,8 @@ const AdBanner: React.FC<AdBannerProps> = ({ banners, baseUrl }) => {
             <Image
               alt={banner.attributes.name}
               className="w-full h-auto"
-              height={imageData.height}
               loading="lazy"
+              height={imageData.height}
               src={`${baseUrl}${imageData.url}`}
               width={imageData.width}
             />

@@ -4,13 +4,14 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script';
 import clsx from 'clsx';
 
-import { Navbar } from '@/components/navbar';
 import { fontSans } from '@/config/fonts';
 import Footer from '@/components/Footer';
 import YandexMetrica from '@/components/YandexMetrica';
 import AdBanner from '@/components/AdBanner';
 
 import { Providers } from './providers';
+import { getCategories, getWebsiteInfo } from '@/config/api';
+import { Navbar } from '@/components/Nav/Navbar';
 
 export const viewport: Viewport = {
   themeColor: [
@@ -22,11 +23,8 @@ export const viewport: Viewport = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
-  const response = await fetch(
-    'http://127.0.0.1:1337/api/websites/2?fields[0]=name&populate[seo][populate][0]=metaSocial&populate[seo][populate][1]=BasicFields&populate[seo][populate][2]=formatDetection&populate[seo][populate][3]=metaRobots'
-  );
-  const data = await response.json();
-  const seo = data?.data?.attributes?.seo || {};
+  const websiteData = await getWebsiteInfo();
+  const seo = websiteData.data.attributes.seo || {};
 
   const metaSocial =
     seo.metaSocial?.map((social: any) => ({
@@ -35,15 +33,6 @@ export async function generateMetadata(): Promise<Metadata> {
       description: social.description,
     })) || [];
 
-  const metaRobots = seo.metaRobots
-    ? [
-        seo.metaRobots.index ? 'index' : 'noindex',
-        seo.metaRobots.follow ? 'follow' : 'nofollow',
-        seo.metaRobots.nocache ? 'noarchive' : '',
-      ]
-        .filter(Boolean)
-        .join(', ')
-    : 'index, follow';
 
   return {
     title: {
@@ -52,7 +41,6 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: seo.metaDescription,
     metadataBase: new URL(seo.canonicalURL),
-    robots: metaRobots,
     keywords: seo.keywords,
     openGraph: {
       type: 'website',
@@ -62,19 +50,16 @@ export async function generateMetadata(): Promise<Metadata> {
         seo.metaDescription || '探索女仆阁的优质服务,体验专业细致的生活照料。',
       siteName: '女仆阁',
     },
-    twitter: metaSocial.map((social: any) => ({
-      handle: '@nupugarden',
-      site: '@nupugarden',
-      cardType: 'summary_large_image',
-      title: social.title,
-      description: social.description,
-    })),
+    twitter: {
+      card: 'summary_large_image',
+      title: seo.metaSocial[0].title,
+      description: seo.metaSocial[0].description,
+    },
     alternates: {
       canonical: seo.canonicalURL,
     },
     generator: seo.BasicFields?.generator || '',
     applicationName: seo.BasicFields?.applicationName || '女仆阁',
-    referrer: seo.BasicFields?.referrer || 'origin-when-cross-origin',
     authors: seo.BasicFields?.authors
       ?.split(',')
       .map((author: string) => ({ name: author.trim() })) || [
@@ -106,26 +91,22 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [resCategory, resWebsite] = await Promise.all([
-    fetch(
-      'http://127.0.0.1:1337/api/categories?populate=subcategories.*&filters[isCategory][$eq]=true&filters[website][$in][0]=2'
-    ),
-    fetch(
-      'http://127.0.0.1:1337/api/websites/2?fields[0]=googleAnalyticsId&fields[1]=email&fields[2]=PPURL&fields[3]=MetrikaID&fields[4]=advertisementCode&fields[5]=announcement&populate[links][fields]=*&populate[advertisement_banners][fields][1]=name&populate[advertisement_banners][fields][2]=url&populate[advertisement_banners][fields][3]=order&populate[advertisement_banners][populate][image][fields][0]=url&populate[advertisement_banners][populate][image][fields][1]=width&populate[advertisement_banners][populate][image][fields][2]=height'
-    ),
+  const [categoryData, websiteData] = await Promise.all([
+    getCategories(),
+    getWebsiteInfo(),
   ]);
 
-  const [dataCategory, dataWebsite] = await Promise.all([
-    resCategory.json(),
-    resWebsite.json(),
-  ]);
+  const categories = categoryData.data;
+  const websiteAttributes = websiteData.data.attributes;
+  const { 
+    googleAnalyticsId, 
+    email, 
+    PPURL, 
+    MetrikaID, 
+    Links,
+    advertisement_banners: adBanners 
+  } = websiteAttributes;
 
-  const categories = dataCategory.data;
-  const { googleAnalyticsId, email, PPURL, MetrikaID, links } =
-    dataWebsite.data.attributes;
-  const advertisementCode =
-    dataWebsite.data.attributes.advertisementCode[0].children[0].text;
-  const adBanners = dataWebsite.data.attributes.advertisement_banners;
   const baseUrl = 'https://strapi.xiaoxinlook.cc';
 
   return (
@@ -152,16 +133,19 @@ export default async function RootLayout({
                 )}
                 {children}
               </main>
-              <Footer email={email} links={links} />
+              <Footer email={email} links={Links} />
             </div>
           </Providers>
-
-          {advertisementCode && (
-            <Script id="advertisementCode" strategy="lazyOnload">
-              {`${advertisementCode}`}
-            </Script>
-          )}
         </YandexMetrica>
+        <Script
+          src="/script.js"
+          strategy="lazyOnload"
+        />
+        <Script
+          data-website-id="5ece0d0c-d2f2-4b9a-afda-466a00363459"
+          src="https://tj.matomo.vip/script.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

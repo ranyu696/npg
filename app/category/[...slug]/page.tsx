@@ -5,60 +5,28 @@ import { Metadata } from 'next';
 import { title, subtitle } from '@/components/primitives';
 import VideoCard from '@/components/VideoCard';
 import Pagination from '@/components/Pagination';
+import { getCategories, getCategoryVideos, getWebsiteInfo } from '@/config/api';
 
-// 数据获取函数
-async function fetchCategoryData(slug: string) {
-  const res = await fetch(
-    `http://127.0.0.1:1337/api/categories?filters[slug][$eq]=${slug}`
-  );
-
-  if (!res.ok) throw new Error('Failed to fetch category data');
-
-  return res.json();
-}
-
-async function fetchWebsiteData() {
-  const res = await fetch(
-    'http://127.0.0.1:1337/api/websites/2?fields[0]=name&fields=imageURL&populate[seo][populate][0]=metaSocial'
-  );
-
-  if (!res.ok) throw new Error('Failed to fetch website data');
-
-  return res.json();
-}
-
-async function fetchVideos(
-  categoryId: number,
-  pageNumber: number,
-  pageSize: number
-) {
-  const res = await fetch(
-    `http://127.0.0.1:1337/api/videos?filters[category][id][$eq]=${categoryId}&pagination[page]=${pageNumber}&pagination[pageSize]=${pageSize}&fields[0]=originalname&fields[1]=duration&fields[2]=aka&fields[3]=count&fields[4]=video_id&populate[poster2][fields][0]=url&populate[poster2][fields][1]=width&populate[poster2][fields][2]=height&populate[category][fields][0]=name`
-  );
-
-  if (!res.ok) throw new Error('Failed to fetch videos');
-
-  return res.json();
-}
-
-// 动态生成元数据
 export async function generateMetadata({
   params,
 }: {
   params: { slug: string[] };
 }): Promise<Metadata> {
-  const [slug, page] = params.slug;
+  const [encodedSlug, page] = params.slug;
+  const slug = decodeURIComponent(encodedSlug);
   const pageNumber = parseInt(page) || 1;
 
   try {
-    const [categoryData, websiteData] = await Promise.all([
-      fetchCategoryData(slug),
-      fetchWebsiteData(),
+    const [categoriesData, websiteData] = await Promise.all([
+      getCategories({ filters: { name: { $eq: slug } } }),
+      getWebsiteInfo(),
     ]);
 
-    const CategoryName = categoryData.data[0]?.attributes.name || '未知分类';
-    const seo = websiteData.data.attributes.seo;
-    const websiteName = websiteData.data.attributes.name;
+    const category = categoriesData.data[0];
+    const CategoryName = category?.attributes.name || '未知分类';
+    const websiteInfo = websiteData.data.attributes;
+    const seo = websiteInfo.seo;
+    const websiteName = websiteInfo.name;
     const baseUrl = seo.canonicalURL || 'https://nvpuge0.cc';
 
     const pageUrl = `${baseUrl}/category/${slug}${pageNumber > 1 ? `/${pageNumber}` : ''}`;
@@ -99,30 +67,34 @@ export default async function CategoryPage({
 }: {
   params: { slug: string[] };
 }) {
-  const [slug, page] = params.slug;
+  const [encodedSlug, page] = params.slug;
+  const slug = decodeURIComponent(encodedSlug);
   const pageNumber = parseInt(page) || 1;
   const pageSize = 20;
 
-  try {
-    const categoryData = await fetchCategoryData(slug);
 
-    if (!categoryData.data || categoryData.data.length === 0) {
+    const [categoriesData, websiteData, videosData] = await Promise.all([
+      getCategories({ filters: { name: { $eq: slug } } }),
+      getWebsiteInfo(),
+      getCategoryVideos(slug, { 
+        pagination: { page: pageNumber, pageSize: pageSize },
+        sort: ['createdAt:desc']
+      }),
+    ]);
+
+    if (!categoriesData.data || categoriesData.data.length === 0) {
       notFound();
     }
 
-    const categoryId = categoryData.data[0].id;
-    const [websiteData, videosData] = await Promise.all([
-      fetchWebsiteData(),
-      fetchVideos(categoryId, pageNumber, pageSize),
-    ]);
-
-    const CategoryName = categoryData.data[0].attributes.name;
-    const websiteImageURL = websiteData.data.attributes.imageURL;
-    const seo = websiteData.data.attributes.seo;
-    const websiteName = websiteData.data.attributes.name;
+    const category = categoriesData.data[0];
+    const CategoryName = category.attributes.name;
+    const websiteInfo = websiteData.data.attributes;
+    const websiteImageURL = websiteInfo.imageURL;
+    const seo = websiteInfo.seo;
+    const websiteName = websiteInfo.name;
     const Videos = videosData.data;
-    const totalCount = videosData.meta.pagination.total;
-    const totalPages = Math.ceil(totalCount / pageSize);
+    const { total } = videosData.meta.pagination;
+    const totalPages = Math.ceil(total / pageSize);
 
     const jsonLd = {
       '@context': 'https://schema.org',
@@ -147,7 +119,8 @@ export default async function CategoryPage({
           '@type': 'VideoObject',
           name: video.attributes.originalname,
           duration: video.attributes.duration,
-          thumbnailUrl: video.attributes.poster2.url,
+          thumbnailUrl: `${websiteImageURL}${video.attributes.poster2.url}`,
+          
         },
       })),
     };
@@ -167,7 +140,7 @@ export default async function CategoryPage({
             </h2>
           </div>
 
-          <div className="columns-2 sm:columns-3 md:columns-3 lg:columns-4 gap-1 s:gap-1.5 m:gap-2.5 sm:gap-3 md:gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-8">
             {Videos.map((video: any) => (
               <VideoCard
                 key={video.id}
@@ -189,8 +162,4 @@ export default async function CategoryPage({
         </section>
       </>
     );
-  } catch (error) {
-    //console.error('Error in CategoryPage:', error);
-    notFound();
-  }
 }
