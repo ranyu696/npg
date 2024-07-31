@@ -51,11 +51,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
     <NextUIProvider navigate={router.push}>
       <NextThemesProvider {...themeProps}>
         {children}
-        <AnnouncementModal
-          announcement={announcement}
-          isOpen={isOpen}
-          onClose={handleClose}
-        />
+        <AnnouncementModal announcement={announcement} isOpen={isOpen} onClose={handleClose} />
       </NextThemesProvider>
     </NextUIProvider>
   );

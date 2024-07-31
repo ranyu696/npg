@@ -1,12 +1,13 @@
 import { Metadata } from 'next';
 import Script from 'next/script';
 
-import VideoPlayer from './VideoPlayer';
-import VideoInfo from './VideoInfo';
-import VideoScreenshots from './VideoScreenshots';
 import VideoCard from '@/components/VideoCard';
 import { getWebsiteInfo, getRelatedVideos, getVideoData } from '@/config/api';
 import { generateAntiTheftUrl, generateVideoJsonLd } from '@/config/utils';
+
+import VideoPlayer from './VideoPlayer';
+import VideoInfo from './VideoInfo';
+import VideoScreenshots from './VideoScreenshots';
 import VideoBread from './VideoBread';
 interface VideoPageProps {
   params: {
@@ -14,25 +15,18 @@ interface VideoPageProps {
   };
 }
 
-export async function generateMetadata({
-  params,
-}: VideoPageProps): Promise<Metadata> {
-  const [video, websiteData] = await Promise.all([
-    getVideoData(params.id),
-    getWebsiteInfo(),
-  ]);
+export async function generateMetadata({ params }: VideoPageProps): Promise<Metadata> {
+  const [video, websiteData] = await Promise.all([getVideoData(params.id), getWebsiteInfo()]);
 
   const websiteInfo = websiteData.data.attributes;
   const seo = websiteInfo.seo;
 
   return {
     title: `${video.attributes.originalname} - ${websiteInfo.name}`,
-    description:
-      video.attributes.aka || `观看 ${video.attributes.originalname} 视频`,
+    description: video.attributes.aka || `观看 ${video.attributes.originalname} 视频`,
     openGraph: {
       title: `${video.attributes.originalname} - ${websiteInfo.name}`,
-      description:
-        video.attributes.aka || `观看 ${video.attributes.originalname} 视频`,
+      description: video.attributes.aka || `观看 ${video.attributes.originalname} 视频`,
       type: 'video.other',
       url: `${seo.canonicalURL}/video/${params.id}`,
       images: [
@@ -47,8 +41,7 @@ export async function generateMetadata({
     twitter: {
       card: 'summary_large_image',
       title: `${video.attributes.originalname} - ${websiteInfo.name}`,
-      description:
-        video.attributes.aka || `观看 ${video.attributes.originalname} 视频`,
+      description: video.attributes.aka || `观看 ${video.attributes.originalname} 视频`,
       images: [`${websiteInfo.imageURL}${video.attributes.poster2.url}`],
     },
     alternates: {
@@ -58,10 +51,7 @@ export async function generateMetadata({
 }
 
 export default async function VideoPage({ params }: VideoPageProps) {
-  const [video, websiteData] = await Promise.all([
-    getVideoData(params.id),
-    getWebsiteInfo(),
-  ]);
+  const [video, websiteData] = await Promise.all([getVideoData(params.id), getWebsiteInfo()]);
 
   const websiteInfo = websiteData.data.attributes;
 
@@ -73,7 +63,9 @@ export default async function VideoPage({ params }: VideoPageProps) {
   );
 
   const categorySlug = video.attributes.category.data.attributes.slug;
-  const relatedVideos = await getRelatedVideos(video.id.toString(), categorySlug, { pagination: { limit: 10 } });
+  const relatedVideos = await getRelatedVideos(video.id.toString(), categorySlug, {
+    pagination: { limit: 10 },
+  });
 
   const jsonLd = generateVideoJsonLd(video, websiteInfo, antiTheftUrl);
 
@@ -85,9 +77,7 @@ export default async function VideoPage({ params }: VideoPageProps) {
         type="application/ld+json"
       />
       <section className="py-4">
-        <h1 className="text-2xl font-bold mb-2">
-          {video.attributes.originalname}
-        </h1>
+        <h1 className="text-2xl font-bold mb-2">{video.attributes.originalname}</h1>
         <div className="mb-2">
           <VideoBread />
         </div>

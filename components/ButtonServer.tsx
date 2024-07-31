@@ -4,9 +4,7 @@ import { Button } from '@nextui-org/button';
 import React from 'react';
 import { FcRatings } from 'react-icons/fc';
 
-const ButtonServer: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+const ButtonServer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const handleClick = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);

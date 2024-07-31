@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardBody } from '@nextui-org/card';
-import { Image } from "@nextui-org/image";
+import { Image } from '@nextui-org/image';
 import { Modal, ModalContent, ModalBody } from '@nextui-org/modal';
 import { Slider } from '@nextui-org/slider';
 
@@ -14,10 +14,7 @@ interface VideoScreenshotsProps {
   websiteImageURL: string;
 }
 
-const VideoScreenshots: React.FC<VideoScreenshotsProps> = ({
-  screenshots,
-  websiteImageURL,
-}) => {
+const VideoScreenshots: React.FC<VideoScreenshotsProps> = ({ screenshots, websiteImageURL }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [sliderValue, setSliderValue] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -38,8 +35,7 @@ const VideoScreenshots: React.FC<VideoScreenshotsProps> = ({
     setSliderValue(newValue);
     if (scrollContainerRef.current) {
       const maxScroll =
-        scrollContainerRef.current.scrollWidth -
-        scrollContainerRef.current.clientWidth;
+        scrollContainerRef.current.scrollWidth - scrollContainerRef.current.clientWidth;
 
       scrollContainerRef.current.scrollLeft = maxScroll * newValue;
     }
@@ -47,8 +43,7 @@ const VideoScreenshots: React.FC<VideoScreenshotsProps> = ({
 
   const handleScroll = () => {
     if (scrollContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } =
-        scrollContainerRef.current;
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
       const maxScroll = scrollWidth - clientWidth;
 
       setSliderValue(scrollLeft / maxScroll);
@@ -66,18 +61,13 @@ const VideoScreenshots: React.FC<VideoScreenshotsProps> = ({
             onScroll={handleScroll}
           >
             {screenshots.map((screenshot, index) => (
-              <div
-                key={index}
-                className="snap-start flex-shrink-0 w-4/5 md:w-1/2 lg:w-1/3"
-              >
+              <div key={index} className="snap-start flex-shrink-0 w-4/5 md:w-1/2 lg:w-1/3">
                 <Image
                   isBlurred
                   alt={`Screenshot ${index + 1}`}
                   className="object-cover w-full h-auto cursor-pointer rounded-lg shadow-md"
                   src={`${websiteImageURL}${screenshot.url}`}
-                  onClick={() =>
-                    setSelectedImage(`${websiteImageURL}${screenshot.url}`)
-                  }
+                  onClick={() => setSelectedImage(`${websiteImageURL}${screenshot.url}`)}
                 />
               </div>
             ))}
@@ -108,11 +98,7 @@ const VideoScreenshots: React.FC<VideoScreenshotsProps> = ({
         <ModalContent>
           <ModalBody>
             {selectedImage && (
-              <Image
-                alt="Selected screenshot"
-                className="w-full h-auto"
-                src={selectedImage}
-              />
+              <Image alt="Selected screenshot" className="w-full h-auto" src={selectedImage} />
             )}
           </ModalBody>
         </ModalContent>

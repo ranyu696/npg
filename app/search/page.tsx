@@ -4,16 +4,15 @@ import Script from 'next/script';
 import { notFound } from 'next/navigation';
 
 import VideoCard from '@/components/VideoCard';
-import Pagination from './Pagination';
 import { getWebsiteInfo, getWebsiteCategories, getSearchResults } from '@/config/api';
+
+import Pagination from './Pagination';
 
 interface SearchPageProps {
   searchParams: { q?: string; page?: string };
 }
 
-export async function generateMetadata({
-  searchParams,
-}: SearchPageProps): Promise<Metadata> {
+export async function generateMetadata({ searchParams }: SearchPageProps): Promise<Metadata> {
   const query = searchParams.q || '';
   const websiteInfo = await getWebsiteInfo();
 
@@ -50,10 +49,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     notFound();
   }
 
-  const [websiteInfo, categoryIds] = await Promise.all([
-    getWebsiteInfo(),
-    getWebsiteCategories(),
-  ]);
+  const [websiteInfo, categoryIds] = await Promise.all([getWebsiteInfo(), getWebsiteCategories()]);
 
   const searchResults = await getSearchResults(query, categoryIds, page);
   const { data, meta } = searchResults;

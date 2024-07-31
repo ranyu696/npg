@@ -24,16 +24,12 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({
       q: query,
       page: page.toString(),
     });
+
     router.push(`${basePath}?${searchParams.toString()}`);
   };
 
   return (
-    <Pagination
-      color="warning"
-      page={pageNumber}
-      total={totalPages}
-      onChange={handlePageChange}
-    />
+    <Pagination color="warning" page={pageNumber} total={totalPages} onChange={handlePageChange} />
   );
 };
 

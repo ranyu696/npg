@@ -5,9 +5,7 @@ const { PHASE_DEVELOPMENT_SERVER } = require('next/constants');
  * @type {import('next').NextConfig}
  */
 module.exports = async (phase, { defaultConfig }) => {
-  const resWebsite = await fetch(
-    'https://strapi.xiaoxinlook.cc/api/websites/2?fields=imageURL'
-  );
+  const resWebsite = await fetch('https://strapi.xiaoxinlook.cc/api/websites/2?fields=imageURL');
   const dataWebsite = await resWebsite.json();
   const websiteImageURL = dataWebsite.data.attributes.imageURL;
 

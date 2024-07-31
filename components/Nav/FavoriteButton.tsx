@@ -2,13 +2,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from '@nextui-org/button';
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from '@nextui-org/modal';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/modal';
 import { FaBookmark } from 'react-icons/fa';
 
 interface FavoriteButtonProps {
@@ -24,11 +18,7 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ userAgent }) => {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          userAgent
-        )
-      );
+      setIsMobile(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent));
     };
 
     checkMobile();

@@ -1,29 +1,21 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 // 假设这些组件和类型在其他文件中定义，需要相应地导入
-import { NavbarItem } from "@nextui-org/navbar";
-import NextLink from "next/link";
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-} from "@nextui-org/dropdown";
-import { Button } from "@nextui-org/button";
+import { NavbarItem } from '@nextui-org/navbar';
+import NextLink from 'next/link';
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@nextui-org/dropdown';
+import { Button } from '@nextui-org/button';
 
-import { ChevronDown } from "@/components/icons";
+import { ChevronDown } from '@/components/icons';
 
-const NavbarItemComponent: React.FC<{ category: Category }> = ({
-  category,
-}) => (
+const NavbarItemComponent: React.FC<{ category: Category }> = ({ category }) => (
   <NavbarItem key={category.id}>
-    {category.attributes.subcategories &&
-    category.attributes.subcategories.data.length > 0 ? (
+    {category.attributes.subcategories && category.attributes.subcategories.data.length > 0 ? (
       <Dropdown
         showArrow
         classNames={{
-          base: "before:bg-default-200", // change arrow background
-          content: "p-0 border-small border-divider bg-background",
+          base: 'before:bg-default-200', // change arrow background
+          content: 'p-0 border-small border-divider bg-background',
         }}
         radius="sm"
       >
@@ -31,7 +23,7 @@ const NavbarItemComponent: React.FC<{ category: Category }> = ({
           <Button
             className="data-[active=true]:text-primary data-[active=true]:font-medium"
             endContent={<ChevronDown fill="currentColor" size={16} />}
-            variant="bordered" 
+            variant="bordered"
           >
             {category.attributes.name}
           </Button>
@@ -49,10 +41,10 @@ const NavbarItemComponent: React.FC<{ category: Category }> = ({
         </DropdownMenu>
       </Dropdown>
     ) : (
-      <NextLink href={`/category/${category.attributes.name || ""}`}>
-        <Button 
-        className="data-[active=true]:text-primary data-[active=true]:font-medium"
-        variant="bordered" 
+      <NextLink href={`/category/${category.attributes.name || ''}`}>
+        <Button
+          className="data-[active=true]:text-primary data-[active=true]:font-medium"
+          variant="bordered"
         >
           {category.attributes.name}
         </Button>

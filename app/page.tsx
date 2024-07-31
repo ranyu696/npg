@@ -1,17 +1,12 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Snippet } from '@nextui-org/snippet';
 import { Code } from '@nextui-org/code';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { Skeleton } from '@nextui-org/skeleton';
 import Script from 'next/script';
 
 import { title, subtitle } from '@/components/primitives';
 import VideoCard from '@/components/VideoCard';
-import {
-  getWebsiteInfo,
-  getHomeVideos,
-} from '@/config/api';
+import { getWebsiteInfo, getHomeVideos } from '@/config/api';
 
 export default async function Home() {
   const categoryIds = [24, 18, 17, 19];
@@ -68,7 +63,10 @@ export default async function Home() {
                 )) || <p>暂无视频</p>}
             </div>
             <div className="text-right mt-2">
-              <Link className="text-primary hover:underline" href={`/category/${category.attributes.name}`}>
+              <Link
+                className="text-primary hover:underline"
+                href={`/category/${category.attributes.name}`}
+              >
                 查看更多
               </Link>
             </div>

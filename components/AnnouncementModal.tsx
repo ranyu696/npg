@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from '@nextui-org/modal';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@nextui-org/modal';
 import { Button } from '@nextui-org/button';
 import ReactMarkdown from 'react-markdown';
 interface AnnouncementModalProps {
@@ -13,11 +7,7 @@ interface AnnouncementModalProps {
   onClose: () => void;
   announcement: string | null;
 }
-const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
-  isOpen,
-  onClose,
-  announcement,
-}) => {
+const AnnouncementModal: React.FC<AnnouncementModalProps> = ({ isOpen, onClose, announcement }) => {
   const handleClose = () => {
     onClose();
   };

@@ -20,6 +20,7 @@ export function generateAntiTheftUrl(
 // 从持续时间字符串中提取分钟数
 export function extractMinutes(durationStr: string): number {
   const match = durationStr.match(/(\d+)\s*分钟/);
+
   return match ? parseInt(match[1], 10) : 0;
 }
 
@@ -27,6 +28,7 @@ export function extractMinutes(durationStr: string): number {
 export function convertMinutesToISO8601(minutes: number): string {
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
+
   return `PT${hours}H${remainingMinutes}M`;
 }
 

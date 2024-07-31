@@ -5,7 +5,7 @@ import React from 'react';
 import { FaFacebookF, FaTwitter, FaLink, FaDiscord } from 'react-icons/fa';
 
 interface VideoInfoProps {
-  video:Video;
+  video: Video;
   websiteImageURL: string;
 }
 
@@ -14,21 +14,15 @@ const VideoInfo: React.FC<VideoInfoProps> = ({ video, websiteImageURL }) => {
     <Card className="h-full">
       <CardHeader className="flex flex-col items-start">
         <div className="flex justify-between w-full mt-2">
-          <span className="text-base text-black">
-            播放: {video.attributes.count}
-          </span>
-          <span className="text-base text-black">
-            时长: {video.attributes.duration}
-          </span>
+          <span className="text-base text-black">播放: {video.attributes.count}</span>
+          <span className="text-base text-black">时长: {video.attributes.duration}</span>
         </div>
         <div className="flex justify-between w-full mt-1">
           <span className="text-base text-black">
             分类: {video.attributes.category.data.attributes.name}
           </span>
           {video.attributes.aka && (
-            <span className="text-base text-black">
-              番号: {video.attributes.aka}
-            </span>
+            <span className="text-base text-black">番号: {video.attributes.aka}</span>
           )}
         </div>
       </CardHeader>

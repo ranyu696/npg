@@ -6,9 +6,7 @@ import {
   NavbarItem,
 } from '@nextui-org/navbar';
 import { Button } from '@nextui-org/button';
-import { link as linkStyles } from '@nextui-org/theme';
 import NextLink from 'next/link';
-import clsx from 'clsx';
 import { FaHome } from 'react-icons/fa';
 import Image from 'next/image';
 import { headers } from 'next/headers';
@@ -47,16 +45,13 @@ export const Navbar: React.FC<NavbarProps> = ({ categories }) => {
           </NextLink>
         </NavbarBrand>
         <ul className="hidden lg:flex gap-4 justify-start ml-2">
-        {categories.map((category) => (
+          {categories.map((category) => (
             <NavbarItemComponent key={category.id} category={category} /> // 使用 NavbarItemComponent 替换重复的逻辑
           ))}
         </ul>
       </NavbarContent>
 
-      <NavbarContent
-        className="hidden sm:flex basis-1/5 sm:basis-full"
-        justify="end"
-      >
+      <NavbarContent className="hidden sm:flex basis-1/5 sm:basis-full" justify="end">
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
         </NavbarItem>

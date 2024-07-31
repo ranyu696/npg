@@ -1,12 +1,12 @@
 type ReferrerEnum =
-  | "no-referrer"
-  | "origin"
-  | "no-referrer-when-downgrade"
-  | "origin-when-cross-origin"
-  | "same-origin"
-  | "strict-origin"
-  | "strict-origin-when-cross-origin"
-  | "unsafe-url"
+  | 'no-referrer'
+  | 'origin'
+  | 'no-referrer-when-downgrade'
+  | 'origin-when-cross-origin'
+  | 'same-origin'
+  | 'strict-origin'
+  | 'strict-origin-when-cross-origin'
+  | 'unsafe-url'
   | null
   | undefined;
 interface SVGProps {
@@ -20,6 +20,7 @@ interface SVGProps {
 
 type IconSvgProps = SVGProps & {
   size?: number;
+  className?: string;
 };
 
 interface Website {
@@ -40,7 +41,7 @@ interface Website {
     advertisement_banners: {
       data: AdvertisementBanner[];
     };
-    Links:Array<{
+    Links: Array<{
       id: number;
       order: number | null;
       name: string;
@@ -112,8 +113,6 @@ interface Category {
   };
 }
 
-
-
 interface SEO {
   canonicalURL: string;
   metaSocial: Array<{
@@ -146,7 +145,7 @@ interface SEO {
 }
 
 interface MetaSocial {
-  socialNetwork: "Facebook" | "Twitter"; // 假设这是枚举类型的可能值
+  socialNetwork: 'Facebook' | 'Twitter'; // 假设这是枚举类型的可能值
   title: string;
   description: string;
   image: Media;
@@ -297,7 +296,7 @@ interface QueryOptions {
   fields?: string[];
   filters?: object;
   locale?: string | string[];
-  publicationState?: "live" | "preview";
+  publicationState?: 'live' | 'preview';
   sort?: string | string[];
   pagination?: {
     page?: number;

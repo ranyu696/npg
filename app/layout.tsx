@@ -8,10 +8,10 @@ import { fontSans } from '@/config/fonts';
 import Footer from '@/components/Footer';
 import YandexMetrica from '@/components/YandexMetrica';
 import AdBanner from '@/components/AdBanner';
-
-import { Providers } from './providers';
 import { getCategories, getWebsiteInfo } from '@/config/api';
 import { Navbar } from '@/components/Nav/Navbar';
+
+import { Providers } from './providers';
 
 export const viewport: Viewport = {
   themeColor: [
@@ -26,14 +26,6 @@ export async function generateMetadata(): Promise<Metadata> {
   const websiteData = await getWebsiteInfo();
   const seo = websiteData.data.attributes.seo || {};
 
-  const metaSocial =
-    seo.metaSocial?.map((social: any) => ({
-      socialNetwork: social.socialNetwork,
-      title: social.title,
-      description: social.description,
-    })) || [];
-
-
   return {
     title: {
       template: seo.templateTitle,
@@ -46,8 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: 'website',
       url: seo.canonicalURL,
       title: seo.metaTitle || '女仆阁 - 专业女仆服务',
-      description:
-        seo.metaDescription || '探索女仆阁的优质服务,体验专业细致的生活照料。',
+      description: seo.metaDescription || '探索女仆阁的优质服务,体验专业细致的生活照料。',
       siteName: '女仆阁',
     },
     twitter: {
@@ -86,46 +77,32 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [categoryData, websiteData] = await Promise.all([
-    getCategories(),
-    getWebsiteInfo(),
-  ]);
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const [categoryData, websiteData] = await Promise.all([getCategories(), getWebsiteInfo()]);
 
   const categories = categoryData.data;
   const websiteAttributes = websiteData.data.attributes;
-  const { 
-    googleAnalyticsId, 
-    email, 
-    PPURL, 
-    MetrikaID, 
+  const {
+    googleAnalyticsId,
+    email,
+    PPURL,
+    MetrikaID,
     Links,
-    advertisement_banners: adBanners 
+    advertisement_banners: adBanners,
   } = websiteAttributes;
 
   const baseUrl = 'https://strapi.xiaoxinlook.cc';
 
   return (
     <html suppressHydrationWarning lang="zh-hk">
-      <body
-        className={clsx(
-          'min-h-screen bg-background font-sans antialiased',
-          fontSans.variable
-        )}
-      >
+      <body className={clsx('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
         <YandexMetrica tagID={MetrikaID}>
           <GoogleAnalytics gaId={googleAnalyticsId} />
           <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
             <div className="relative flex flex-col h-screen">
               <Navbar categories={categories} />
               <div className="bg-indigo-600 px-4 py-3 text-white">
-                <p className="text-center text-sm font-medium">
-                  永久域名：{PPURL}
-                </p>
+                <p className="text-center text-sm font-medium">永久域名：{PPURL}</p>
               </div>
               <main className="container mx-auto max-w-7xl pt-8 px-2 flex-grow">
                 {adBanners && adBanners.data && adBanners.data.length > 0 && (
@@ -137,10 +114,7 @@ export default async function RootLayout({
             </div>
           </Providers>
         </YandexMetrica>
-        <Script
-          src="/script.js"
-          strategy="lazyOnload"
-        />
+        <Script src="/script.js" strategy="lazyOnload" />
         <Script
           data-website-id="5ece0d0c-d2f2-4b9a-afda-466a00363459"
           src="https://tj.matomo.vip/script.js"

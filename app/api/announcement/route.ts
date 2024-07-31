@@ -2,10 +2,9 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const res = await fetch(
-      'https://strapi.xiaoxinlook.cc/api/websites/1?fields[]=announcement',
-      { next: { revalidate: 60 } }
-    );
+    const res = await fetch('https://strapi.xiaoxinlook.cc/api/websites/1?fields[]=announcement', {
+      next: { revalidate: 60 },
+    });
     const data = await res.json();
 
     const announcement = data?.data?.attributes?.announcement || '暂无公告';

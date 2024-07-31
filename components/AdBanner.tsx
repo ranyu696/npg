@@ -1,7 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 
-
 interface AdBannerProps {
   banners: {
     data: AdvertisementBanner[];
@@ -41,8 +40,8 @@ const AdBanner: React.FC<AdBannerProps> = ({ banners, baseUrl }) => {
             <Image
               alt={banner.attributes.name}
               className="w-full h-auto"
-              loading="lazy"
               height={imageData.height}
+              loading="lazy"
               src={`${baseUrl}${imageData.url}`}
               width={imageData.width}
             />

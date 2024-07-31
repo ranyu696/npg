@@ -5,8 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint --fix"
+    "start": "next start", 
+    "prod": "next build && next start",
+    "lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "lint-and-format": "eslint . --ext .js,.jsx,.ts,.tsx --fix && npm run format"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
